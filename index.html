@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Keluarga | Rumah Kita</title>
+  <meta name="description" content="Portal digital keluarga — tempat berbagi cerita, kenangan, dan informasi bersama orang-orang tercinta." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <div class="logo-icon">🏡</div>
+        <span class="logo-text">Rumah<span class="logo-accent">Kita</span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active" id="link-home">Beranda</a></li>
+        <li><a href="#agenda" class="nav-link" id="link-agenda">Agenda</a></li>
+        <li><a href="#galeri" class="nav-link" id="link-galeri">Galeri</a></li>
+        <li><a href="#silsilah" class="nav-link" id="link-silsilah">Silsilah</a></li>
+        <li><a href="#kontak" class="nav-link" id="link-kontak">Kontak</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-login" id="btn-login">Masuk</button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div class="hero-grid">
+
+      <!-- Hero Main Card -->
+      <div class="hero-card hero-main glass-light">
+        <div class="hero-badge">✨ Portal Keluarga 2026</div>
+        <h1 class="hero-title">Satu Keluarga,<br /><span class="gradient-text">Satu Rumah Digital</span></h1>
+        <p class="hero-desc">Tempat berbagi cerita, kenangan, dan moment berharga bersama seluruh anggota keluarga tercinta. Terhubung kapan saja, di mana saja.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" id="btn-jelajahi">Jelajahi Sekarang <span class="btn-arrow">→</span></button>
+          <button class="btn-ghost" id="btn-galeri">Lihat Galeri</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">24</span>
+            <span class="stat-label">Anggota</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num">3</span>
+            <span class="stat-label">Generasi</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num">150+</span>
+            <span class="stat-label">Foto</span>
+          </div>
+        </div>
+        <img src="assets/family_deco.png" class="hero-deco" alt="" aria-hidden="true" />
+      </div>
+
+      <!-- Hero Feature Card - Foto Utama -->
+      <div class="hero-card hero-photo">
+        <div class="photo-overlay"></div>
+        <img src="assets/family_hero.png" class="photo-img" alt="Keluarga Bersama" />
+        <div class="photo-info">
+          <h3 class="photo-title">Keluarga Besar</h3>
+          <p class="photo-sub">Bersatu dalam kasih sayang</p>
+          <button class="btn-play" id="btn-lihat-foto">Lihat Semua →</button>
+        </div>
+        <div class="photo-tag">📸 Koleksi Terbaru</div>
+      </div>
+
+      <!-- Card Agenda -->
+      <div class="hero-card hero-agenda glass-teal">
+        <div class="card-header-row">
+          <h3 class="card-title">📅 Agenda Keluarga</h3>
+          <a href="#agenda" class="card-link" id="link-view-all">Lihat Semua</a>
+        </div>
+        <div class="agenda-list">
+          <div class="agenda-item" id="agenda-1">
+            <div class="agenda-date">
+              <span class="agenda-day">15</span>
+              <span class="agenda-month">Apr</span>
+            </div>
+            <div class="agenda-info">
+              <span class="agenda-name">Arisan Bulanan</span>
+              <span class="agenda-loc">📍 Rumah Pak Budi</span>
+            </div>
+            <span class="agenda-badge upcoming">Segera</span>
+          </div>
+          <div class="agenda-item" id="agenda-2">
+            <div class="agenda-date">
+              <span class="agenda-day">22</span>
+              <span class="agenda-month">Apr</span>
+            </div>
+            <div class="agenda-info">
+              <span class="agenda-name">Ulang Tahun Nenek</span>
+              <span class="agenda-loc">📍 Semua Hadir</span>
+            </div>
+            <span class="agenda-badge birthday">🎂 HUT</span>
+          </div>
+          <div class="agenda-item" id="agenda-3">
+            <div class="agenda-date">
+              <span class="agenda-day">01</span>
+              <span class="agenda-month">Mei</span>
+            </div>
+            <div class="agenda-info">
+              <span class="agenda-name">Reuni Keluarga</span>
+              <span class="agenda-loc">📍 Pantai Parangtritis</span>
+            </div>
+            <span class="agenda-badge reuni">Reuni</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Pengumuman -->
+      <div class="hero-card hero-announce glass-purple">
+        <div class="announce-icon">🔔</div>
+        <h3 class="announce-title">Papan Pengumuman</h3>
+        <div class="announce-list">
+          <div class="announce-item" id="ann-1">
+            <span class="ann-dot new"></span>
+            <div class="ann-content">
+              <p class="ann-text">Iuran kas bulan April sudah dibuka</p>
+              <span class="ann-time">2 jam lalu</span>
+            </div>
+          </div>
+          <div class="announce-item" id="ann-2">
+            <span class="ann-dot"></span>
+            <div class="ann-content">
+              <p class="ann-text">Foto reuni 2025 sudah diupload ke galeri</p>
+              <span class="ann-time">1 hari lalu</span>
+            </div>
+          </div>
+          <div class="announce-item" id="ann-3">
+            <span class="ann-dot"></span>
+            <div class="ann-content">
+              <p class="ann-text">Selamat! Dede baru lahir keluarga Om Roni</p>
+              <span class="ann-time">3 hari lalu</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-outline-small" id="btn-all-announce">Semua Pengumuman</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FITUR SECTION -->
+  <section class="features-section" id="fitur">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">Fitur Unggulan</span>
+        <h2 class="section-title">Semua yang Keluarga <span class="gradient-text">Butuhkan</span></h2>
+        <p class="section-desc">Dari galeri foto hingga silsilah keluarga — semua tersedia dalam satu platform yang mudah digunakan.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card" id="feat-galeri">
+          <div class="feature-icon">🖼️</div>
+          <h3 class="feature-name">Galeri Foto</h3>
+          <p class="feature-desc">Simpan dan bagikan momen berharga bersama keluarga dalam album digital yang terorganisir.</p>
+          <div class="feature-footer">
+            <span class="feature-count">150+ Foto</span>
+            <button class="feature-btn" id="fbtn-galeri">Buka →</button>
+          </div>
+        </div>
+        <div class="feature-card featured" id="feat-silsilah">
+          <div class="feature-badge-top">⭐ Favorit</div>
+          <div class="feature-icon">🌳</div>
+          <h3 class="feature-name">Pohon Silsilah</h3>
+          <p class="feature-desc">Telusuri sejarah keluarga dan hubungan antar anggota secara interaktif dan visual.</p>
+          <div class="feature-footer">
+            <span class="feature-count">3 Generasi</span>
+            <button class="feature-btn" id="fbtn-silsilah">Buka →</button>
+          </div>
+        </div>
+        <div class="feature-card" id="feat-agenda">
+          <div class="feature-icon">📅</div>
+          <h3 class="feature-name">Kalender Acara</h3>
+          <p class="feature-desc">Jangan sampai ketinggalan arisan, ulang tahun, atau reuni keluarga lagi.</p>
+          <div class="feature-footer">
+            <span class="feature-count">5 Acara</span>
+            <button class="feature-btn" id="fbtn-agenda">Buka →</button>
+          </div>
+        </div>
+        <div class="feature-card" id="feat-kas">
+          <div class="feature-icon">💰</div>
+          <h3 class="feature-name">Kas Keluarga</h3>
+          <p class="feature-desc">Kelola keuangan bersama dengan transparan — catat pemasukan, pengeluaran, dan laporan bulanan.</p>
+          <div class="feature-footer">
+            <span class="feature-count">Transparan</span>
+            <button class="feature-btn" id="fbtn-kas">Buka →</button>
+          </div>
+        </div>
+        <div class="feature-card" id="feat-cerita">
+          <div class="feature-icon">📖</div>
+          <h3 class="feature-name">Buku Cerita</h3>
+          <p class="feature-desc">Tulis dan baca kisah-kisah keluarga yang menjadi warisan untuk generasi selanjutnya.</p>
+          <div class="feature-footer">
+            <span class="feature-count">12 Cerita</span>
+            <button class="feature-btn" id="fbtn-cerita">Buka →</button>
+          </div>
+        </div>
+        <div class="feature-card" id="feat-kontak">
+          <div class="feature-icon">📞</div>
+          <h3 class="feature-name">Direktori Kontak</h3>
+          <p class="feature-desc">Nomor telepon, alamat, dan info penting semua anggota keluarga dalam satu tempat.</p>
+          <div class="feature-footer">
+            <span class="feature-count">24 Kontak</span>
+            <button class="feature-btn" id="fbtn-kontak">Buka →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANGGOTA SECTION -->
+  <section class="members-section" id="anggota">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">👨‍👩‍👧‍👦 Keluarga Kami</span>
+        <h2 class="section-title">Anggota <span class="gradient-text">Terbaru</span></h2>
+      </div>
+      <div class="members-grid">
+        <div class="member-card" id="member-1">
+          <div class="member-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">B</div>
+          <div class="member-info">
+            <span class="member-name">Budi Santoso</span>
+            <span class="member-role">👑 Kepala Keluarga</span>
+          </div>
+          <span class="member-status online"></span>
+        </div>
+        <div class="member-card" id="member-2">
+          <div class="member-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">S</div>
+          <div class="member-info">
+            <span class="member-name">Siti Rahma</span>
+            <span class="member-role">❤️ Ibu Keluarga</span>
+          </div>
+          <span class="member-status online"></span>
+        </div>
+        <div class="member-card" id="member-3">
+          <div class="member-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">A</div>
+          <div class="member-info">
+            <span class="member-name">Ahmad Fauzi</span>
+            <span class="member-role">🎓 Anak Pertama</span>
+          </div>
+          <span class="member-status away"></span>
+        </div>
+        <div class="member-card" id="member-4">
+          <div class="member-avatar" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">D</div>
+          <div class="member-info">
+            <span class="member-name">Dewi Putri</span>
+            <span class="member-role">🌸 Anak Kedua</span>
+          </div>
+          <span class="member-status online"></span>
+        </div>
+        <div class="member-card" id="member-5">
+          <div class="member-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">R</div>
+          <div class="member-info">
+            <span class="member-name">Rizky Pratama</span>
+            <span class="member-role">🦁 Anak Ketiga</span>
+          </div>
+          <span class="member-status offline"></span>
+        </div>
+        <div class="member-card add-card" id="member-add">
+          <div class="member-avatar add-avatar">+</div>
+          <div class="member-info">
+            <span class="member-name">Tambah Anggota</span>
+            <span class="member-role">Undang keluarga baru</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERI PREVIEW -->
+  <section class="galeri-section" id="galeri">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">📸 Kenangan Indah</span>
+        <h2 class="section-title">Galeri <span class="gradient-text">Keluarga</span></h2>
+        <p class="section-desc">Setiap momen berharga tersimpan dengan aman untuk dikenang bersama.</p>
+      </div>
+      <div class="galeri-grid">
+        <div class="galeri-item large" id="gal-1">
+          <img src="assets/family_hero.png" alt="Foto Keluarga Bersama" />
+          <div class="galeri-overlay">
+            <span class="galeri-label">Reuni 2025</span>
+            <button class="galeri-btn" id="gbtn-1">Lihat →</button>
+          </div>
+        </div>
+        <div class="galeri-item" id="gal-2">
+          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <span>🎂</span><p>Ulang Tahun<br/>Nenek 80th</p>
+          </div>
+          <div class="galeri-overlay">
+            <span class="galeri-label">HUT Nenek</span>
+            <button class="galeri-btn" id="gbtn-2">Lihat →</button>
+          </div>
+        </div>
+        <div class="galeri-item" id="gal-3">
+          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <span>🏖️</span><p>Liburan<br/>Keluarga</p>
+          </div>
+          <div class="galeri-overlay">
+            <span class="galeri-label">Liburan 2024</span>
+            <button class="galeri-btn" id="gbtn-3">Lihat →</button>
+          </div>
+        </div>
+        <div class="galeri-item" id="gal-4">
+          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <span>👶</span><p>Kelahiran<br/>Si Kecil</p>
+          </div>
+          <div class="galeri-overlay">
+            <span class="galeri-label">Momen Spesial</span>
+            <button class="galeri-btn" id="gbtn-4">Lihat →</button>
+          </div>
+        </div>
+        <div class="galeri-item" id="gal-5">
+          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <span>🎓</span><p>Wisuda<br/>Ahmad</p>
+          </div>
+          <div class="galeri-overlay">
+            <span class="galeri-label">Wisuda 2023</span>
+            <button class="galeri-btn" id="gbtn-5">Lihat →</button>
+          </div>
+        </div>
+      </div>
+      <div class="galeri-footer">
+        <button class="btn-primary" id="btn-all-galeri">Lihat Semua Foto <span class="btn-arrow">→</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="kontak">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-icon large">🏡</div>
+        <span class="logo-text large">Rumah<span class="logo-accent">Kita</span></span>
+        <p class="footer-tagline">Bersama dalam kasih, terhubung dalam doa.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" id="soc-wa" aria-label="WhatsApp">💬</a>
+          <a href="#" class="social-btn" id="soc-ig" aria-label="Instagram">📷</a>
+          <a href="#" class="social-btn" id="soc-yt" aria-label="YouTube">🎥</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="#home" id="flink-home">Beranda</a></li>
+          <li><a href="#galeri" id="flink-galeri">Galeri</a></li>
+          <li><a href="#silsilah" id="flink-silsilah">Silsilah</a></li>
+          <li><a href="#agenda" id="flink-agenda">Agenda</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Fitur</h4>
+        <ul>
+          <li><a href="#" id="flink-kas">Kas Keluarga</a></li>
+          <li><a href="#" id="flink-cerita">Buku Cerita</a></li>
+          <li><a href="#" id="flink-kontak">Direktori Kontak</a></li>
+          <li><a href="#" id="flink-pengumuman">Pengumuman</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Kontak Admin</h4>
+        <p>📱 +62 812-3456-7890</p>
+        <p>📧 admin@rumahkita.id</p>
+        <p>📍 Yogyakarta, Indonesia</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RumahKita — Portal Keluarga. Dibuat dengan ❤️ untuk keluarga.</p>
+    </div>
+  </footer>
+
+  <!-- MODAL LOGIN -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="loginModal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-icon">🏡</div>
+      <h2 class="modal-title">Masuk ke Portal Keluarga</h2>
+      <p class="modal-desc">Silakan masuk untuk mengakses fitur lengkap.</p>
+      <div class="modal-form">
+        <div class="form-group">
+          <label for="input-email">Email / Nomor HP</label>
+          <input type="text" id="input-email" placeholder="contoh@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="input-pass">Kata Sandi</label>
+          <input type="password" id="input-pass" placeholder="••••••••" />
+        </div>
+        <button class="btn-primary full" id="btn-submit-login">Masuk Sekarang</button>
+        <p class="modal-register">Belum punya akun? <a href="#" id="link-daftar">Daftar di sini</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
