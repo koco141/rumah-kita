@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Masuk — RumahKita Portal Keluarga</title>
+  <link rel="icon" type="image/png" href="assets/green-tea.png" />
+  <meta name="description" content="Halaman masuk Portal Keluarga RumahKita. Login dengan akun Google atau Admin." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:        #10b981;
+      --accent-dark:   #059669;
+      --accent-teal:   #0d9488;
+      --accent-gold:   #f59e0b;
+      --text-primary:  #0f172a;
+      --text-secondary:#475569;
+      --text-muted:    #94a3b8;
+      --border:        rgba(0,0,0,0.08);
+      --radius-md:     18px;
+      --radius-lg:     28px;
+      --font-main:     'Outfit', sans-serif;
+      --transition:    0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: var(--font-main);
+      background: #f0fdf4;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ============================
+       PANEL KIRI — AGENDA
+    ============================= */
+    .panel-left {
+      flex: 1;
+      background: linear-gradient(145deg, #0f172a 0%, #134e4a 60%, #065f46 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative blobs */
+    .panel-left::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%);
+      top: -100px; left: -100px;
+      pointer-events: none;
+    }
+    .panel-left::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+      bottom: -80px; right: -80px;
+      pointer-events: none;
+    }
+
+    /* Brand */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 8px 24px rgba(16,185,129,0.4);
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .brand-name span { color: #34d399; }
+
+    /* Agenda Section */
+    .agenda-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      padding: 32px 0;
+    }
+
+    .agenda-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #34d399;
+      margin-bottom: 8px;
+    }
+
+    .agenda-section-heading {
+      font-size: clamp(26px, 3vw, 38px);
+      font-weight: 900;
+      color: white;
+      line-height: 1.2;
+      margin-bottom: 32px;
+    }
+
+    .agenda-section-heading span {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Agenda cards */
+    .agenda-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .agenda-card-item {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: var(--transition);
+      cursor: default;
+    }
+
+    .agenda-card-item:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateX(6px);
+    }
+
+    .aci-date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(16,185,129,0.2);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 10px;
+      padding: 8px 12px;
+      min-width: 52px;
+    }
+
+    .aci-day {
+      font-size: 22px;
+      font-weight: 900;
+      color: #34d399;
+      line-height: 1;
+    }
+
+    .aci-month {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 1px;
+    }
+
+    .aci-info { flex: 1; }
+
+    .aci-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 3px;
+    }
+
+    .aci-loc {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .aci-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+
+    .aci-badge.birthday { background: rgba(251,191,36,0.2); color: #fbbf24; }
+    .aci-badge.reuni    { background: rgba(139,92,246,0.2); color: #a78bfa; }
+    .aci-badge.upcoming { background: rgba(16,185,129,0.2); color: #34d399; }
+
+    /* Countdown pill */
+    .aci-countdown {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 4px;
+    }
+
+    /* Default graphic when no agenda */
+    .no-agenda-graphic {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 0;
+      gap: 16px;
+    }
+
+    .no-agenda-svg-wrap {
+      width: 180px;
+      height: 180px;
+      position: relative;
+    }
+
+    .no-agenda-graphic p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      max-width: 240px;
+      line-height: 1.6;
+    }
+
+    .no-agenda-graphic .label {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      text-align: center;
+    }
+
+    /* Footer left */
+    .panel-left-footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .panel-left-footer p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.6;
+    }
+
+    .panel-left-footer strong { color: rgba(255,255,255,0.6); }
+
+    /* ============================
+       PANEL KANAN — LOGIN
+    ============================= */
+    .panel-right {
+      width: 480px;
+      flex-shrink: 0;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 48px;
+      position: relative;
+      overflow-y: auto;
+      box-shadow: -20px 0 60px rgba(0,0,0,0.08);
+    }
+
+    .panel-right-inner {
+      margin: auto 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Decorative top bar */
+    .panel-right::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #10b981, #0d9488, #059669);
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .login-logo-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 6px 20px rgba(16,185,129,0.35);
+    }
+
+    .login-logo-text {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .login-logo-text span { color: var(--accent-teal); }
+
+    .login-heading {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--text-primary);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .login-subheading {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Google Button */
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 24px;
+      border-radius: 14px;
+      border: 1.5px solid #e2e8f0;
+      background: white;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font-main);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+    }
+
+    .btn-google:hover {
+      border-color: #10b981;
+      background: #f0fdf4;
+      box-shadow: 0 4px 20px rgba(16,185,129,0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-google:active { transform: translateY(0); }
+
+    .btn-google svg {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+    }
+
+    .btn-google.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    .divider span {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Admin label */
+    .admin-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .admin-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(245,158,11,0.12);
+      color: var(--accent-gold);
+      padding: 4px 10px;
+      border-radius: 50px;
+      border: 1px solid rgba(245,158,11,0.25);
+    }
+
+    .admin-label span:last-child {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1.5px solid #e2e8f0;
+      font-size: 15px;
+      font-family: var(--font-main);
+      color: var(--text-primary);
+      transition: var(--transition);
+      outline: none;
+      background: #fafafa;
+    }
+
+    .form-group input:focus {
+      border-color: #10b981;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+    }
+
+    .form-group input::placeholder { color: #cbd5e1; }
+
+    /* Show password toggle */
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input { padding-right: 48px; }
+
+    .toggle-pass {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--text-muted);
+      padding: 4px;
+      line-height: 1;
+    }
+
+    /* Submit */
+    .btn-admin-login {
+      width: 100%;
+      padding: 14px 24px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: var(--font-main);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(16,185,129,0.3);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-admin-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(16,185,129,0.45);
+    }
+
+    .btn-admin-login:active { transform: translateY(0); }
+
+    .btn-admin-login:disabled {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* Error message */
+    .login-error {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .login-error.show { display: flex; }
+
+    /* Footer */
+    .login-footer {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #f1f5f9;
+      text-align: center;
+    }
+
+    .login-footer p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .login-footer a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .login-footer a:hover { text-decoration: underline; }
+
+    /* Loading spinner */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    /* Toast */
+    #login-toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: #0f172a;
+      color: white;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-main);
+      z-index: 9999;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      max-width: 340px;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+
+    #login-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    #login-toast.success { background: #059669; }
+    #login-toast.error   { background: #dc2626; }
+    #login-toast.warning { background: #d97706; }
+    #login-toast.info    { background: #0891b2; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    .float-anim { animation: float 4s ease-in-out infinite; }
+
+    /* Scrollbar styling untuk panel kanan */
+    .panel-right::-webkit-scrollbar {
+      width: 6px;
+    }
+    .panel-right::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .panel-right::-webkit-scrollbar-thumb {
+      background: rgba(16, 185, 129, 0.2);
+      border-radius: 10px;
+    }
+    .panel-right::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.4);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      body { flex-direction: column; overflow: auto; }
+      .panel-left {
+        padding: 32px 28px 24px;
+        min-height: auto;
+        overflow: visible;
+      }
+      .agenda-section { padding: 16px 0; }
+      .panel-right {
+        width: 100%;
+        padding: 40px 28px;
+        box-shadow: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .panel-left { display: none; }
+      .panel-right { padding: 32px 24px; }
+    }
+
+    /* Optimalisasi layar pendek (laptop 13" / layar resolusi rendah) */
+    @media (max-height: 780px) {
+      .panel-right { padding: 24px 36px; }
+      .login-logo { margin-bottom: 16px; }
+      .login-heading { font-size: 24px; }
+      .login-subheading { margin-bottom: 16px; font-size: 14px; }
+      .btn-google { margin-bottom: 16px; padding: 12px 20px; }
+      .divider { margin-bottom: 16px; }
+      .form-group { margin-bottom: 12px; }
+      .form-group input { padding: 11px 14px; }
+      .btn-admin-login { padding: 12px 20px; }
+      .login-footer { margin-top: 16px; padding-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== PANEL KIRI ===================== -->
+  <div class="panel-left">
+
+    <!-- Brand -->
+    <div class="brand">
+      <div class="brand-icon">🏡</div>
+      <div class="brand-name">Rumah<span>Kita</span></div>
+    </div>
+
+    <!-- Agenda Section -->
+    <div class="agenda-section">
+      <p class="agenda-section-title">📅 Jadwal Mendatang</p>
+      <h2 class="agenda-section-heading">Agenda <span>Keluarga</span></h2>
+
+      <!-- Container agenda — diisi oleh JS -->
+      <div class="agenda-cards" id="loginAgendaList">
+
+        <!-- Default placeholder sementara data dimuat -->
+        <div style="display:flex;align-items:center;gap:12px;opacity:0.5;padding:12px 0;">
+          <div style="width:52px;height:52px;border-radius:10px;background:rgba(255,255,255,0.1);animation:pulse 1.5s infinite;"></div>
+          <div style="flex:1;">
+            <div style="height:14px;border-radius:6px;background:rgba(255,255,255,0.1);margin-bottom:6px;animation:pulse 1.5s infinite;"></div>
+            <div style="height:10px;border-radius:6px;background:rgba(255,255,255,0.08);width:60%;animation:pulse 1.5s infinite;"></div>
+          </div>
+        </div>
+        <style>@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}</style>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="panel-left-footer">
+      <p>© 2026 <strong>RumahKita</strong> — Portal Digital Keluarga<br/>Bersama dalam hangat,  terhubung dalam doa. 🤝</p>
+    </div>
+
+  </div>
+
+  <!-- ===================== PANEL KANAN ===================== -->
+  <div class="panel-right">
+    <div class="panel-right-inner">
+
+      <!-- Logo kecil -->
+      <div class="login-logo">
+        <div class="login-logo-icon">🏡</div>
+        <div class="login-logo-text">Rumah<span>Kita</span></div>
+      </div>
+
+      <h1 class="login-heading">Selamat Datang<br/>Kembali 👋</h1>
+      <p class="login-subheading">Masuk untuk mengakses Portal Keluarga dan terhubung dengan semua anggota.</p>
+
+      <!-- ── GOOGLE LOGIN ── -->
+      <button class="btn-google" id="btn-google-login">
+        <!-- Google SVG Icon -->
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        Masuk dengan Google
+      </button>
+
+      <!-- Error display -->
+      <div class="login-error" id="loginError">
+        <span>⚠️</span>
+        <span id="loginErrorMsg">Terjadi kesalahan.</span>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider"><span>atau masuk menggunakan username</span></div>
+
+      <!-- Admin Form -->
+      <form id="adminForm" autocomplete="on" onsubmit="return false;">
+        <div class="form-group">
+          <label for="adminUsername">Username</label>
+          <input type="text" id="adminUsername" name="username"
+                 placeholder="Masukkan username admin"
+                 autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Kata Sandi</label>
+          <div class="input-wrap">
+            <input type="password" id="adminPassword" name="password"
+                   placeholder="••••••••"
+                   autocomplete="current-password" />
+            <button type="button" class="toggle-pass" id="togglePass" title="Tampilkan sandi">👁</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-admin-login" id="btnAdminLogin">
+          <span id="adminLoginText">Masuk sebagai Admin</span>
+          <div class="spinner" id="adminSpinner"></div>
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="login-footer">
+        <p>
+          Hanya anggota yang terdaftar yang dapat mengakses portal ini.<br/>
+          Hubungi Admin jika mengalami masalah.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="login-toast"></div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+
+    // ══════════════════════════════════════════════════════════════════════
+    //  WHITELIST — Dikelola Admin melalui panel "Kelola Anggota"
+    //  Data disimpan di Firestore: data/whitelist → { emails: [...] }
+    //  Admin mengelola daftar ini dari tombol "👥 Anggota" di navbar
+    // ══════════════════════════════════════════════════════════════════════
+    let ALLOWED_EMAILS = []; // Akan diisi dari Firestore
+    let whitelistLoaded = false;
+
+    // Load whitelist dari Firestore saat halaman dibuka
+    async function loadWhitelist() {
+      try {
+        if (typeof db !== 'undefined' && db) {
+          const doc = await db.collection('data').doc('whitelist').get();
+          if (doc.exists && Array.isArray(doc.data().emails)) {
+            ALLOWED_EMAILS = doc.data().emails.map(e => e.toLowerCase().trim()).filter(Boolean);
+          }
+        }
+        // Fallback dari localStorage (cache)
+        if (ALLOWED_EMAILS.length === 0) {
+          const cached = localStorage.getItem('whitelistEmails');
+          if (cached) ALLOWED_EMAILS = JSON.parse(cached);
+        }
+      } catch (err) {
+        // Pakai cache jika Firestore error
+        const cached = localStorage.getItem('whitelistEmails');
+        if (cached) ALLOWED_EMAILS = JSON.parse(cached);
+      }
+      whitelistLoaded = true;
+    }
+
+    // Mulai load whitelist segera
+    loadWhitelist();
+
+    // ── ADMIN CREDENTIALS (fallback lokal) ─────────────────────────────────
+    const ADMIN_EMAIL    = 'admin@keluarga.com';
+    const ADMIN_PASSWORD = 'MbahAman@2026';
+
+    // ── MONTHS ─────────────────────────────────────────────────────────────
+    const MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+    // ── TOAST ───────────────────────────────────────────────────────────────
+    function showToast(msg, type = 'info', duration = 3500) {
+      const t = document.getElementById('login-toast');
+      t.textContent = msg;
+      t.className = 'show ' + type;
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => { t.className = ''; }, duration);
+    }
+
+    // ── SHOW ERROR ──────────────────────────────────────────────────────────
+    function showError(msg) {
+      const el = document.getElementById('loginError');
+      document.getElementById('loginErrorMsg').textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 6000);
+    }
+
+    // ── REDIRECT AFTER LOGIN ────────────────────────────────────────────────
+    function redirectToHome() {
+      window.location.replace('index.html');
+    }
+
+    // ── CEK SUDAH LOGIN? ────────────────────────────────────────────────────
+    // Jika sudah login, langsung ke index.html
+    (function checkAlreadyLoggedIn() {
+      const role = localStorage.getItem('userRole');
+      if (role === 'admin' || role === 'anggota') {
+        redirectToHome();
+      }
+    })();
+
+    // ── LOAD AGENDA FROM LOCALSTORAGE / FIRESTORE ───────────────────────────
+    function renderLoginAgenda() {
+      const agendaData = JSON.parse(localStorage.getItem('agendaDataV1')) || [];
+      const container  = document.getElementById('loginAgendaList');
+
+      if (agendaData.length === 0) {
+        // Tampilkan grafik/ilustrasi default
+        container.innerHTML = `
+          <div class="no-agenda-graphic">
+            <div class="no-agenda-svg-wrap float-anim">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="180" height="180">
+                <!-- Background circle -->
+                <circle cx="100" cy="100" r="90" fill="rgba(16,185,129,0.08)" stroke="rgba(16,185,129,0.2)" stroke-width="1.5"/>
+
+                <!-- Calendar body -->
+                <rect x="44" y="60" width="112" height="96" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                <rect x="44" y="60" width="112" height="28" rx="12" fill="rgba(16,185,129,0.3)"/>
+                <rect x="44" y="80" width="112" height="8" fill="rgba(16,185,129,0.3)"/>
+
+                <!-- Calendar header dots -->
+                <circle cx="68" cy="52" r="6" fill="#10b981" opacity="0.9"/>
+                <circle cx="132" cy="52" r="6" fill="#10b981" opacity="0.9"/>
+                <line x1="68" y1="46" x2="68" y2="58" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                <line x1="132" y1="46" x2="132" y2="58" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+
+                <!-- Calendar text -->
+                <text x="100" y="79" text-anchor="middle" fill="white" font-size="11" font-weight="700" font-family="Outfit,sans-serif">KALENDER KELUARGA</text>
+
+                <!-- Grid cells -->
+                <rect x="54" y="96" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="76" y="96" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="98" y="96" width="16" height="14" rx="3" fill="rgba(16,185,129,0.3)"/>
+                <rect x="120" y="96" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="54" y="116" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="76" y="116" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="98" y="116" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="120" y="116" width="16" height="14" rx="3" fill="rgba(245,158,11,0.3)"/>
+                <rect x="54" y="136" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="76" y="136" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+                <rect x="98" y="136" width="16" height="14" rx="3" fill="rgba(255,255,255,0.06)"/>
+
+                <!-- Numbers -->
+                <text x="62" y="106" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">5</text>
+                <text x="84" y="106" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">12</text>
+                <text x="106" y="106" text-anchor="middle" fill="white" font-size="8" font-weight="700" font-family="Outfit,sans-serif">19</text>
+                <text x="128" y="106" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">26</text>
+                <text x="62" y="126" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">6</text>
+                <text x="84" y="126" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">13</text>
+                <text x="106" y="126" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">20</text>
+                <text x="128" y="126" text-anchor="middle" fill="#fbbf24" font-size="8" font-weight="700" font-family="Outfit,sans-serif">27</text>
+                <text x="62" y="146" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">7</text>
+                <text x="84" y="146" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">14</text>
+                <text x="106" y="146" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-family="Outfit,sans-serif">21</text>
+
+                <!-- Star decoration -->
+                <circle cx="155" cy="65" r="12" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+                <text x="155" y="69" text-anchor="middle" font-size="12">⭐</text>
+
+                <!-- Heart decoration -->
+                <text x="45" y="155" font-size="14">❤️</text>
+                <text x="148" y="145" font-size="11">🎉</text>
+              </svg>
+            </div>
+            <div class="label">Belum Ada Agenda</div>
+            <p>Agenda keluarga akan muncul di sini setelah Admin menambahkan acara.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Tampilkan agenda yang akan datang
+      const now = new Date(); now.setHours(0, 0, 0, 0);
+      agendaData.sort((a, b) => new Date(a.date) - new Date(b.date));
+      const upcoming = agendaData.filter(ev => new Date(ev.date) >= now).slice(0, 3);
+      const items = upcoming.length > 0 ? upcoming : agendaData.slice(0, 3);
+
+      container.innerHTML = items.map(ev => {
+        const d    = new Date(ev.date);
+        const diff = Math.ceil((d - now) / 86400000);
+        const countdown = diff > 0 ? `${diff} hari lagi` : diff === 0 ? 'Hari ini!' : 'Sudah berlalu';
+        const badgeClass = ev.category === 'birthday' ? 'birthday' : ev.category === 'reuni' ? 'reuni' : 'upcoming';
+        const badgeLabel = ev.category === 'birthday' ? '🎂 HUT' : ev.category === 'reuni' ? '🤝 Reuni' : '📌 Segera';
+
+        return `
+          <div class="agenda-card-item">
+            <div class="aci-date">
+              <span class="aci-day">${d.getDate()}</span>
+              <span class="aci-month">${MONTHS[d.getMonth()]}</span>
+            </div>
+            <div class="aci-info">
+              <div class="aci-title">${ev.title}</div>
+              <div class="aci-loc">📍 ${ev.loc || 'Lokasi TBA'}</div>
+              <div class="aci-countdown">🕐 ${countdown}</div>
+            </div>
+            <span class="aci-badge ${badgeClass}">${badgeLabel}</span>
+          </div>`;
+      }).join('');
+    }
+
+    // ── GOOGLE SIGN-IN ──────────────────────────────────────────────────────
+    document.getElementById('btn-google-login').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-google-login');
+
+      if (typeof auth === 'undefined' || !auth) {
+        showToast('⚠️ Firebase belum terkonfigurasi.', 'warning');
+        return;
+      }
+
+      btn.classList.add('loading');
+      btn.textContent = '⏳ Menghubungkan Google...';
+
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        const result = await auth.signInWithPopup(provider);
+        const email  = result.user.email;
+
+        // Pastikan whitelist sudah dimuat dari Firestore
+        if (!whitelistLoaded) {
+          btn.textContent = '⏳ Mengecek akses...';
+          await loadWhitelist();
+        }
+
+        // Cek whitelist (Wajib terdaftar)
+        if (!ALLOWED_EMAILS.includes(email.toLowerCase())) {
+          await auth.signOut();
+          showError(`Email "${email}" belum terdaftar sebagai anggota. Hubungi Admin untuk mendaftarkan akun Anda.`);
+          btn.classList.remove('loading');
+          btn.innerHTML = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg> Masuk dengan Google`;
+          return;
+        }
+
+        // Jika whitelist kosong = semua Gmail boleh, atau email terdaftar
+        localStorage.setItem('userRole', 'anggota');
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', result.user.displayName || email.split('@')[0]);
+        showToast(`✅ Selamat datang, ${result.user.displayName || email}!`, 'success', 2000);
+        setTimeout(redirectToHome, 1500);
+
+      } catch (err) {
+        console.error('Google login error:', err);
+        btn.classList.remove('loading');
+        btn.innerHTML = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg> Masuk dengan Google`;
+
+        if (err.code === 'auth/popup-closed-by-user') return;
+        if (err.code === 'auth/popup-blocked') {
+          showError('Pop-up diblokir oleh browser. Izinkan pop-up untuk domain ini lalu coba lagi.');
+        } else {
+          showError('Gagal login Google: ' + (err.message || 'Terjadi kesalahan'));
+        }
+      }
+    });
+
+    // ── ADMIN LOGIN ─────────────────────────────────────────────────────────
+    document.getElementById('adminForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('adminUsername').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+      const btn      = document.getElementById('btnAdminLogin');
+      const textEl   = document.getElementById('adminLoginText');
+      const spinner  = document.getElementById('adminSpinner');
+
+      if (!username || !password) {
+        showError('Mohon isi username dan kata sandi.');
+        return;
+      }
+
+      // Loading state
+      btn.disabled       = true;
+      textEl.textContent = 'Memverifikasi...';
+      spinner.style.display = 'block';
+
+      const isFirebaseConfigured = typeof firebaseConfig !== 'undefined' &&
+                                   firebaseConfig.apiKey &&
+                                   !firebaseConfig.apiKey.includes('Fake');
+
+      if (typeof auth !== 'undefined' && auth && isFirebaseConfigured) {
+        // Coba Firebase Email/Password
+        try {
+          await auth.signInWithEmailAndPassword(username, password);
+          localStorage.setItem('userRole', 'admin');
+          localStorage.setItem('userEmail', username);
+          localStorage.setItem('userName', 'Admin');
+          showToast('✅ Berhasil masuk sebagai Admin!', 'success', 2000);
+          setTimeout(redirectToHome, 1500);
+        } catch (err) {
+          btn.disabled       = false;
+          textEl.textContent = 'Masuk sebagai Admin';
+          spinner.style.display = 'none';
+
+          let msg = 'Username atau kata sandi salah.';
+          if (err.code === 'auth/user-not-found')     msg = 'Akun admin belum terdaftar di Firebase.';
+          else if (err.code === 'auth/wrong-password') msg = 'Kata sandi salah.';
+          else if (err.code === 'auth/invalid-email')  msg = 'Format email tidak valid.';
+          else if (err.code === 'auth/operation-not-allowed') msg = 'Login Email/Password belum diaktifkan di Firebase Console.';
+          showError(msg);
+        }
+
+      } else {
+        // Fallback: credentials lokal
+        await new Promise(r => setTimeout(r, 800)); // simulasi delay
+        if (username === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+          localStorage.setItem('userRole', 'admin');
+          localStorage.setItem('userEmail', username);
+          localStorage.setItem('userName', 'Admin');
+          showToast('✅ Berhasil masuk sebagai Admin!', 'success', 2000);
+          setTimeout(redirectToHome, 1500);
+        } else {
+          btn.disabled       = false;
+          textEl.textContent = 'Masuk sebagai Admin';
+          spinner.style.display = 'none';
+          showError('Username atau kata sandi salah.');
+        }
+      }
+    });
+
+    // ── TOGGLE PASSWORD VISIBILITY ──────────────────────────────────────────
+    document.getElementById('togglePass').addEventListener('click', () => {
+      const input  = document.getElementById('adminPassword');
+      const btn    = document.getElementById('togglePass');
+      const isPass = input.type === 'password';
+      input.type   = isPass ? 'text' : 'password';
+      btn.textContent = isPass ? '🙈' : '👁';
+    });
+
+    // ── FIRESTORE AGENDA SYNC ───────────────────────────────────────────────
+    // Load agenda dari Firestore jika tersedia (bisa baca tanpa login)
+    if (typeof db !== 'undefined' && db) {
+      db.collection('data').doc('agenda').get()
+        .then(doc => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data && Array.isArray(data.list)) {
+              localStorage.setItem('agendaDataV1', JSON.stringify(data.list));
+            }
+          }
+          renderLoginAgenda();
+        })
+        .catch(() => renderLoginAgenda());
+    } else {
+      renderLoginAgenda();
+    }
+
+    // ── ENTER KEY SUPPORT ───────────────────────────────────────────────────
+    document.getElementById('adminPassword').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('adminForm').dispatchEvent(new Event('submit'));
+    });
+
+  </script>
+</body>
+</html>

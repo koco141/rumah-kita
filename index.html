@@ -1,16 +1,98 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Keluarga | Rumah Kita</title>
-  <meta name="description" content="Portal digital keluarga — tempat berbagi cerita, kenangan, dan informasi bersama orang-orang tercinta." />
+  <link rel="icon" type="image/png" href="assets/green-tea.png" />
+  <meta name="description"
+    content="Portal digital keluarga — tempat berbagi cerita, kenangan, dan informasi bersama orang-orang tercinta." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── HERO GRID (no announce card) ── */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      grid-template-rows: auto;
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 88px 32px 60px;
+    }
+
+    .hero-main {
+      grid-column: 1;
+      grid-row: 1 / 3;
+    }
+
+    .hero-photo {
+      grid-column: 2 / 4;
+      grid-row: 1;
+    }
+
+    .hero-agenda {
+      grid-column: 2 / 4;
+      grid-row: 2;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr 1fr;
+        padding: 76px 20px 40px;
+      }
+
+      .hero-main {
+        grid-column: 1 / 3;
+        grid-row: 1;
+      }
+
+      .hero-photo {
+        grid-column: 1 / 3;
+        grid-row: 2;
+      }
+
+      .hero-agenda {
+        grid-column: 1 / 3;
+        grid-row: 3;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        padding: 68px 16px 40px;
+      }
+
+      .hero-main,
+      .hero-photo,
+      .hero-agenda {
+        grid-column: 1;
+      }
+
+      .hero-main {
+        grid-row: 1;
+      }
+
+      .hero-photo {
+        grid-row: 2;
+      }
+
+      .hero-agenda {
+        grid-row: 3;
+      }
+  </style>
 </head>
+
 <body>
+
+  <!-- AUTH GUARD: Redirect ke login.html jika belum login -->
+  <script src="auth-guard.js"></script>
 
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
@@ -21,13 +103,15 @@
       </div>
       <ul class="nav-links" id="navLinks">
         <li><a href="#home" class="nav-link active" id="link-home">Beranda</a></li>
-        <li><a href="#agenda" class="nav-link" id="link-agenda">Agenda</a></li>
-        <li><a href="#galeri" class="nav-link" id="link-galeri">Galeri</a></li>
-        <li><a href="#silsilah" class="nav-link" id="link-silsilah">Silsilah</a></li>
-        <li><a href="#kontak" class="nav-link" id="link-kontak">Kontak</a></li>
+        <li><a href="agenda.html" class="nav-link" id="link-agenda">Agenda</a></li>
+        <li><a href="galeri.html" class="nav-link" id="link-galeri">Galeri</a></li>
+        <li><a href="silsilah.html" class="nav-link" id="link-silsilah">Silsilah</a></li>
+        <li><a href="kontak.html" class="nav-link" id="link-kontak">Kontak</a></li>
       </ul>
-      <div class="nav-actions">
-        <button class="btn-login" id="btn-login">Masuk</button>
+      <div class="nav-actions" style="display:flex; align-items:center; gap:10px;">
+        <!-- User info + Logout -->
+        <span id="navUserName" style="font-size:13px;font-weight:600;color:var(--text-secondary);display:none;"></span>
+        <button class="btn-login" id="btn-login" onclick="doLogout()">Keluar</button>
         <button class="hamburger" id="hamburger" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
@@ -43,31 +127,37 @@
       <div class="hero-card hero-main glass-light">
         <div class="hero-badge">✨ Portal Keluarga 2026</div>
         <h1 class="hero-title">Satu Keluarga,<br /><span class="gradient-text">Satu Rumah Digital</span></h1>
-        <p class="hero-desc">Tempat berbagi cerita, kenangan, dan moment berharga bersama seluruh anggota keluarga tercinta. Terhubung kapan saja, di mana saja.</p>
+        <p class="hero-desc">Tempat berbagi cerita, kenangan, dan moment berharga bersama seluruh anggota keluarga
+          tercinta. Terhubung kapan saja, di mana saja.</p>
         <div class="hero-btns">
           <button class="btn-primary" id="btn-jelajahi">Jelajahi Sekarang <span class="btn-arrow">→</span></button>
-          <button class="btn-ghost" id="btn-galeri">Lihat Galeri</button>
+          <button class="btn-ghost" id="btn-galeri" onclick="window.location.href='galeri.html'">Lihat Galeri</button>
         </div>
         <div class="hero-stats">
           <div class="stat-item">
-            <span class="stat-num">24</span>
+            <span class="stat-num" id="statAnggota">0</span>
             <span class="stat-label">Anggota</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
-            <span class="stat-num">3</span>
+            <span class="stat-num" id="statGenerasi">0</span>
             <span class="stat-label">Generasi</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
-            <span class="stat-num">150+</span>
+            <span class="stat-num" id="statAgenda">0</span>
+            <span class="stat-label">Agenda</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num" id="statFoto">0</span>
             <span class="stat-label">Foto</span>
           </div>
         </div>
-        <img src="assets/family_deco.png" class="hero-deco" alt="" aria-hidden="true" />
+        <img src="assets/family_deco.png?v=1.1" class="hero-deco" alt="" aria-hidden="true" />
       </div>
 
-      <!-- Hero Feature Card - Foto Utama -->
+      <!-- Hero Photo Card -->
       <div class="hero-card hero-photo">
         <div class="photo-overlay"></div>
         <img src="assets/family_hero.png" class="photo-img" alt="Keluarga Bersama" />
@@ -83,73 +173,11 @@
       <div class="hero-card hero-agenda glass-teal">
         <div class="card-header-row">
           <h3 class="card-title">📅 Agenda Keluarga</h3>
-          <a href="#agenda" class="card-link" id="link-view-all">Lihat Semua</a>
+          <a href="agenda.html" class="card-link" id="link-view-all">Lihat Semua</a>
         </div>
-        <div class="agenda-list">
-          <div class="agenda-item" id="agenda-1">
-            <div class="agenda-date">
-              <span class="agenda-day">15</span>
-              <span class="agenda-month">Apr</span>
-            </div>
-            <div class="agenda-info">
-              <span class="agenda-name">Arisan Bulanan</span>
-              <span class="agenda-loc">📍 Rumah Pak Budi</span>
-            </div>
-            <span class="agenda-badge upcoming">Segera</span>
-          </div>
-          <div class="agenda-item" id="agenda-2">
-            <div class="agenda-date">
-              <span class="agenda-day">22</span>
-              <span class="agenda-month">Apr</span>
-            </div>
-            <div class="agenda-info">
-              <span class="agenda-name">Ulang Tahun Nenek</span>
-              <span class="agenda-loc">📍 Semua Hadir</span>
-            </div>
-            <span class="agenda-badge birthday">🎂 HUT</span>
-          </div>
-          <div class="agenda-item" id="agenda-3">
-            <div class="agenda-date">
-              <span class="agenda-day">01</span>
-              <span class="agenda-month">Mei</span>
-            </div>
-            <div class="agenda-info">
-              <span class="agenda-name">Reuni Keluarga</span>
-              <span class="agenda-loc">📍 Pantai Parangtritis</span>
-            </div>
-            <span class="agenda-badge reuni">Reuni</span>
-          </div>
+        <div class="agenda-list" id="homepageAgendaList">
+          <!-- Dynamically filled -->
         </div>
-      </div>
-
-      <!-- Card Pengumuman -->
-      <div class="hero-card hero-announce glass-purple">
-        <div class="announce-icon">🔔</div>
-        <h3 class="announce-title">Papan Pengumuman</h3>
-        <div class="announce-list">
-          <div class="announce-item" id="ann-1">
-            <span class="ann-dot new"></span>
-            <div class="ann-content">
-              <p class="ann-text">Iuran kas bulan April sudah dibuka</p>
-              <span class="ann-time">2 jam lalu</span>
-            </div>
-          </div>
-          <div class="announce-item" id="ann-2">
-            <span class="ann-dot"></span>
-            <div class="ann-content">
-              <p class="ann-text">Foto reuni 2025 sudah diupload ke galeri</p>
-              <span class="ann-time">1 hari lalu</span>
-            </div>
-          </div>
-          <div class="announce-item" id="ann-3">
-            <span class="ann-dot"></span>
-            <div class="ann-content">
-              <p class="ann-text">Selamat! Dede baru lahir keluarga Om Roni</p>
-              <span class="ann-time">3 hari lalu</span>
-            </div>
-          </div>
-        </div>
-        <button class="btn-outline-small" id="btn-all-announce">Semua Pengumuman</button>
       </div>
 
     </div>
@@ -161,15 +189,17 @@
       <div class="section-header">
         <span class="section-eyebrow">Fitur Unggulan</span>
         <h2 class="section-title">Semua yang Keluarga <span class="gradient-text">Butuhkan</span></h2>
-        <p class="section-desc">Dari galeri foto hingga silsilah keluarga — semua tersedia dalam satu platform yang mudah digunakan.</p>
+        <p class="section-desc">Dari galeri foto hingga silsilah keluarga — semua tersedia dalam satu platform yang
+          mudah digunakan.</p>
       </div>
       <div class="features-grid">
         <div class="feature-card" id="feat-galeri">
           <div class="feature-icon">🖼️</div>
           <h3 class="feature-name">Galeri Foto</h3>
-          <p class="feature-desc">Simpan dan bagikan momen berharga bersama keluarga dalam album digital yang terorganisir.</p>
+          <p class="feature-desc">Simpan dan bagikan momen berharga bersama keluarga dalam album digital yang
+            terorganisir.</p>
           <div class="feature-footer">
-            <span class="feature-count">150+ Foto</span>
+            <span class="feature-count" id="fc-galeri">0 Foto</span>
             <button class="feature-btn" id="fbtn-galeri">Buka →</button>
           </div>
         </div>
@@ -179,7 +209,7 @@
           <h3 class="feature-name">Pohon Silsilah</h3>
           <p class="feature-desc">Telusuri sejarah keluarga dan hubungan antar anggota secara interaktif dan visual.</p>
           <div class="feature-footer">
-            <span class="feature-count">3 Generasi</span>
+            <span class="feature-count" id="fc-silsilah">0 Anggota</span>
             <button class="feature-btn" id="fbtn-silsilah">Buka →</button>
           </div>
         </div>
@@ -188,25 +218,27 @@
           <h3 class="feature-name">Kalender Acara</h3>
           <p class="feature-desc">Jangan sampai ketinggalan arisan, ulang tahun, atau reuni keluarga lagi.</p>
           <div class="feature-footer">
-            <span class="feature-count">5 Acara</span>
+            <span class="feature-count" id="fc-agenda">0 Acara</span>
             <button class="feature-btn" id="fbtn-agenda">Buka →</button>
           </div>
         </div>
         <div class="feature-card" id="feat-kas">
           <div class="feature-icon">💰</div>
           <h3 class="feature-name">Kas Keluarga</h3>
-          <p class="feature-desc">Kelola keuangan bersama dengan transparan — catat pemasukan, pengeluaran, dan laporan bulanan.</p>
+          <p class="feature-desc">Kelola keuangan bersama dengan transparan — catat pemasukan, pengeluaran, dan laporan
+            bulanan.</p>
           <div class="feature-footer">
-            <span class="feature-count">Transparan</span>
+            <span class="feature-count">Segera Hadir</span>
             <button class="feature-btn" id="fbtn-kas">Buka →</button>
           </div>
         </div>
         <div class="feature-card" id="feat-cerita">
           <div class="feature-icon">📖</div>
           <h3 class="feature-name">Buku Cerita</h3>
-          <p class="feature-desc">Tulis dan baca kisah-kisah keluarga yang menjadi warisan untuk generasi selanjutnya.</p>
+          <p class="feature-desc">Tulis dan baca kisah-kisah keluarga yang menjadi warisan untuk generasi selanjutnya.
+          </p>
           <div class="feature-footer">
-            <span class="feature-count">12 Cerita</span>
+            <span class="feature-count">Segera Hadir</span>
             <button class="feature-btn" id="fbtn-cerita">Buka →</button>
           </div>
         </div>
@@ -215,7 +247,7 @@
           <h3 class="feature-name">Direktori Kontak</h3>
           <p class="feature-desc">Nomor telepon, alamat, dan info penting semua anggota keluarga dalam satu tempat.</p>
           <div class="feature-footer">
-            <span class="feature-count">24 Kontak</span>
+            <span class="feature-count" id="fc-kontak">0 Kontak</span>
             <button class="feature-btn" id="fbtn-kontak">Buka →</button>
           </div>
         </div>
@@ -228,56 +260,10 @@
     <div class="container">
       <div class="section-header">
         <span class="section-eyebrow">👨‍👩‍👧‍👦 Keluarga Kami</span>
-        <h2 class="section-title">Anggota <span class="gradient-text">Terbaru</span></h2>
+        <h2 class="section-title">Anggota <span class="gradient-text">Terdaftar</span></h2>
       </div>
-      <div class="members-grid">
-        <div class="member-card" id="member-1">
-          <div class="member-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">B</div>
-          <div class="member-info">
-            <span class="member-name">Budi Santoso</span>
-            <span class="member-role">👑 Kepala Keluarga</span>
-          </div>
-          <span class="member-status online"></span>
-        </div>
-        <div class="member-card" id="member-2">
-          <div class="member-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">S</div>
-          <div class="member-info">
-            <span class="member-name">Siti Rahma</span>
-            <span class="member-role">❤️ Ibu Keluarga</span>
-          </div>
-          <span class="member-status online"></span>
-        </div>
-        <div class="member-card" id="member-3">
-          <div class="member-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">A</div>
-          <div class="member-info">
-            <span class="member-name">Ahmad Fauzi</span>
-            <span class="member-role">🎓 Anak Pertama</span>
-          </div>
-          <span class="member-status away"></span>
-        </div>
-        <div class="member-card" id="member-4">
-          <div class="member-avatar" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">D</div>
-          <div class="member-info">
-            <span class="member-name">Dewi Putri</span>
-            <span class="member-role">🌸 Anak Kedua</span>
-          </div>
-          <span class="member-status online"></span>
-        </div>
-        <div class="member-card" id="member-5">
-          <div class="member-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">R</div>
-          <div class="member-info">
-            <span class="member-name">Rizky Pratama</span>
-            <span class="member-role">🦁 Anak Ketiga</span>
-          </div>
-          <span class="member-status offline"></span>
-        </div>
-        <div class="member-card add-card" id="member-add">
-          <div class="member-avatar add-avatar">+</div>
-          <div class="member-info">
-            <span class="member-name">Tambah Anggota</span>
-            <span class="member-role">Undang keluarga baru</span>
-          </div>
-        </div>
+      <div class="members-grid" id="membersGrid">
+        <!-- Dynamically filled -->
       </div>
     </div>
   </section>
@@ -290,53 +276,12 @@
         <h2 class="section-title">Galeri <span class="gradient-text">Keluarga</span></h2>
         <p class="section-desc">Setiap momen berharga tersimpan dengan aman untuk dikenang bersama.</p>
       </div>
-      <div class="galeri-grid">
-        <div class="galeri-item large" id="gal-1">
-          <img src="assets/family_hero.png" alt="Foto Keluarga Bersama" />
-          <div class="galeri-overlay">
-            <span class="galeri-label">Reuni 2025</span>
-            <button class="galeri-btn" id="gbtn-1">Lihat →</button>
-          </div>
-        </div>
-        <div class="galeri-item" id="gal-2">
-          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <span>🎂</span><p>Ulang Tahun<br/>Nenek 80th</p>
-          </div>
-          <div class="galeri-overlay">
-            <span class="galeri-label">HUT Nenek</span>
-            <button class="galeri-btn" id="gbtn-2">Lihat →</button>
-          </div>
-        </div>
-        <div class="galeri-item" id="gal-3">
-          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-            <span>🏖️</span><p>Liburan<br/>Keluarga</p>
-          </div>
-          <div class="galeri-overlay">
-            <span class="galeri-label">Liburan 2024</span>
-            <button class="galeri-btn" id="gbtn-3">Lihat →</button>
-          </div>
-        </div>
-        <div class="galeri-item" id="gal-4">
-          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-            <span>👶</span><p>Kelahiran<br/>Si Kecil</p>
-          </div>
-          <div class="galeri-overlay">
-            <span class="galeri-label">Momen Spesial</span>
-            <button class="galeri-btn" id="gbtn-4">Lihat →</button>
-          </div>
-        </div>
-        <div class="galeri-item" id="gal-5">
-          <div class="galeri-placeholder" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-            <span>🎓</span><p>Wisuda<br/>Ahmad</p>
-          </div>
-          <div class="galeri-overlay">
-            <span class="galeri-label">Wisuda 2023</span>
-            <button class="galeri-btn" id="gbtn-5">Lihat →</button>
-          </div>
-        </div>
+      <div class="galeri-grid" id="galeriGrid">
+        <!-- Dynamically filled -->
       </div>
       <div class="galeri-footer">
-        <button class="btn-primary" id="btn-all-galeri">Lihat Semua Foto <span class="btn-arrow">→</span></button>
+        <button class="btn-primary" id="btn-all-galeri" onclick="window.location.href='galeri.html'">Lihat Semua Foto
+          <span class="btn-arrow">→</span></button>
       </div>
     </div>
   </section>
@@ -358,9 +303,10 @@
         <h4>Navigasi</h4>
         <ul>
           <li><a href="#home" id="flink-home">Beranda</a></li>
-          <li><a href="#galeri" id="flink-galeri">Galeri</a></li>
-          <li><a href="#silsilah" id="flink-silsilah">Silsilah</a></li>
-          <li><a href="#agenda" id="flink-agenda">Agenda</a></li>
+          <li><a href="galeri.html" id="flink-galeri">Galeri</a></li>
+          <li><a href="silsilah.html" id="flink-silsilah">Silsilah</a></li>
+          <li><a href="agenda.html" id="flink-agenda">Agenda</a></li>
+          <li><a href="kontak.html" id="flink-kontak-page">Kontak</a></li>
         </ul>
       </div>
       <div class="footer-links">
@@ -368,15 +314,14 @@
         <ul>
           <li><a href="#" id="flink-kas">Kas Keluarga</a></li>
           <li><a href="#" id="flink-cerita">Buku Cerita</a></li>
-          <li><a href="#" id="flink-kontak">Direktori Kontak</a></li>
           <li><a href="#" id="flink-pengumuman">Pengumuman</a></li>
         </ul>
       </div>
       <div class="footer-contact">
         <h4>Kontak Admin</h4>
-        <p>📱 +62 812-3456-7890</p>
-        <p>📧 admin@rumahkita.id</p>
-        <p>📍 Yogyakarta, Indonesia</p>
+        <p>📱 +62 812-2007-405</p>
+        <p>📧 admin@keluarga.com</p>
+        <p>📍 Bandung, Indonesia</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -406,6 +351,410 @@
     </div>
   </div>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-close" id="lightboxClose">✕</div>
+    <div class="lightbox-content">
+      <div class="lightbox-card">
+        <div class="lightbox-img-wrapper">
+          <img src="" alt="View Photo" class="lightbox-img" id="lightboxImg" />
+        </div>
+        <div class="lightbox-info">
+          <span class="lightbox-date" id="lightboxDate"></span>
+          <h3 class="lightbox-title" id="lightboxTitle"></h3>
+          <span class="lightbox-category" id="lightboxCategory"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="app.js"></script>
+  <script>
+    // ── DYNAMIC DATA RENDERING ─────────────────────────
+    let familyData = JSON.parse(localStorage.getItem('silsilahDataV1')) || [];
+    let galeriData = JSON.parse(localStorage.getItem('galeriDataV1')) || [];
+    let agendaData = JSON.parse(localStorage.getItem('agendaDataV1')) || [];
+    let kontakData = JSON.parse(localStorage.getItem('kontakDataV1')) || [];
+    const userRole = localStorage.getItem('userRole') || 'anggota';
+    const isAdmin = userRole === 'admin';
+
+    const colors = [
+      'linear-gradient(135deg,#667eea,#764ba2)',
+      'linear-gradient(135deg,#f093fb,#f5576c)',
+      'linear-gradient(135deg,#4facfe,#00f2fe)',
+      'linear-gradient(135deg,#43e97b,#38f9d7)',
+      'linear-gradient(135deg,#fa709a,#fee140)'
+    ];
+
+    function getGenerationsCount(data) {
+      if (!data || data.length === 0) return 0;
+      const kidsMap = {};
+      data.forEach(m => {
+        if (m.parentId) {
+          if (!kidsMap[m.parentId]) kidsMap[m.parentId] = [];
+          kidsMap[m.parentId].push(m);
+        }
+      });
+      const roots = data.filter(m => !m.parentId && m.role !== 'Pasangan');
+      if (roots.length === 0) return 1;
+
+      function maxDepth(memberId) {
+        const kids = kidsMap[memberId] || [];
+        if (kids.length === 0) return 1;
+        let maxSubDepth = 0;
+        kids.forEach(k => {
+          maxSubDepth = Math.max(maxSubDepth, maxDepth(k.id));
+        });
+        return 1 + maxSubDepth;
+      }
+
+      let maxDepthVal = 0;
+      roots.forEach(r => {
+        maxDepthVal = Math.max(maxDepthVal, maxDepth(r.id));
+      });
+      return maxDepthVal;
+    }
+
+    // Helper untuk mendeteksi hubungan kekeluargaan (menghilangkan tag Generasi)
+    function getMemberRelation(m, allMembers) {
+      if (!m || !allMembers || allMembers.length === 0) return m.role || 'Anggota';
+      if (m.role === 'Pasangan') {
+        const partner = allMembers.find(x => x.id === m.parentId);
+        return partner ? `Pasangan dari ${partner.name.split(' ')[0]}` : 'Pasangan';
+      } else if (m.parentId && m.role !== 'Luhur') {
+        const parent = allMembers.find(x => x.id === m.parentId);
+        const parentName = parent ? parent.name.split(' ')[0] : '';
+        return parent ? `${m.role} dari ${parentName}` : m.role;
+      }
+      return m.role || 'Anggota';
+    }
+
+    // ── Auto Scroll Marquee Loop ──
+    let isAutoScrollPaused = false;
+    let autoScrollTimeout = null;
+    let scrollDirection = 1;
+    let lastScrollLeft = -1;
+
+    function initAutoScroll() {
+      const grid = document.getElementById('membersGrid');
+      if (!grid) return;
+
+      grid.style.scrollBehavior = 'auto';
+
+      let lastTime = performance.now();
+      const speed = 0.02; // Piksel per milidetik (sangat pelan dan mulus)
+
+      function step(time) {
+        const activeGrid = document.getElementById('membersGrid');
+        if (!activeGrid) {
+          requestAnimationFrame(step);
+          return;
+        }
+        
+        const delta = Math.min(time - lastTime, 50); // Batasi lompatan maks saat ganti tab
+        lastTime = time;
+
+        if (!isAutoScrollPaused) {
+          const maxScroll = activeGrid.scrollWidth - activeGrid.clientWidth;
+          
+          if (maxScroll > 0) {
+            let nextScrollLeft = activeGrid.scrollLeft + (speed * delta * scrollDirection);
+            
+            if (scrollDirection === 1 && nextScrollLeft >= maxScroll) {
+              nextScrollLeft = maxScroll;
+              scrollDirection = -1;
+            } else if (scrollDirection === -1 && nextScrollLeft <= 0) {
+              nextScrollLeft = 0;
+              scrollDirection = 1;
+            }
+            
+            activeGrid.scrollLeft = nextScrollLeft;
+          }
+        }
+        
+        requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+
+      function pauseAutoScroll() {
+        isAutoScrollPaused = true;
+        clearTimeout(autoScrollTimeout);
+        autoScrollTimeout = setTimeout(() => {
+          isAutoScrollPaused = false;
+          lastTime = performance.now();
+        }, 4000); // Jalan kembali otomatis setelah 4 detik hening
+      }
+
+      grid.addEventListener('mousedown', pauseAutoScroll, { passive: true });
+      grid.addEventListener('touchstart', pauseAutoScroll, { passive: true });
+      grid.addEventListener('wheel', pauseAutoScroll, { passive: true });
+      
+      let isScrollingTimeout = null;
+      grid.addEventListener('scroll', () => {
+        const currentScroll = grid.scrollLeft;
+        const diff = Math.abs(currentScroll - lastScrollLeft);
+        
+        // Deteksi jika user melakukan scroll manual secara signifikan
+        if (diff > 1.5) {
+          pauseAutoScroll();
+        }
+        lastScrollLeft = currentScroll;
+
+        grid.classList.add('is-scrolling');
+        clearTimeout(isScrollingTimeout);
+        isScrollingTimeout = setTimeout(() => {
+          grid.classList.remove('is-scrolling');
+        }, 1200);
+      }, { passive: true });
+    }
+
+    function updateHomepageUI() {
+      // Stats
+      document.getElementById('statAnggota').textContent = familyData.length || kontakData.length;
+      document.getElementById('statGenerasi').textContent = getGenerationsCount(familyData);
+      document.getElementById('statAgenda').textContent = agendaData.length;
+      document.getElementById('statFoto').textContent = galeriData.length > 0 ? galeriData.length + '+' : '0';
+
+      // Feature counts
+      document.getElementById('fc-galeri').textContent = galeriData.length + ' Foto';
+      document.getElementById('fc-silsilah').textContent = familyData.length + ' Anggota';
+      document.getElementById('fc-agenda').textContent = agendaData.length + ' Acara';
+      document.getElementById('fc-kontak').textContent = kontakData.length + ' Kontak';
+
+      // ── Agenda Preview ──
+      const agendaListEl = document.getElementById('homepageAgendaList');
+      if (agendaListEl) {
+        if (agendaData.length === 0) {
+          agendaListEl.innerHTML = `<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:24px 0;">Belum ada agenda keluarga.</p>`;
+        } else {
+          const now = new Date(); now.setHours(0, 0, 0, 0);
+          agendaData.sort((a, b) => new Date(a.date) - new Date(b.date));
+          const upcoming = agendaData.filter(ev => new Date(ev.date) >= now).slice(0, 3);
+          const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+          const items = upcoming.length > 0 ? upcoming : agendaData.slice(0, 3);
+          agendaListEl.innerHTML = items.map(ev => {
+            const d = new Date(ev.date);
+            return `<div class="agenda-item" onclick="window.location.href='agenda.html'">
+              <div class="agenda-date">
+                <span class="agenda-day">${d.getDate()}</span>
+                <span class="agenda-month">${months[d.getMonth()]}</span>
+              </div>
+              <div class="agenda-info">
+                <span class="agenda-name">${ev.title}</span>
+                ${ev.mapUrl ?
+                `<a href="${ev.mapUrl}" target="_blank" onclick="event.stopPropagation()" class="agenda-loc" style="color: var(--accent-purple); text-decoration: underline; font-weight: 600; display: inline-block;">📍 ${ev.loc} <span style="font-size: 10px; font-weight: 500; color: var(--text-muted);">(Peta ↗)</span></a>` :
+                `<span class="agenda-loc">📍 ${ev.loc}</span>`}
+              </div>
+              <span class="agenda-badge ${ev.category}">${ev.category === 'birthday' ? '🎂 HUT' : ev.category === 'reuni' ? 'Reuni' : 'Segera'}</span>
+            </div>`;
+          }).join('');
+        }
+      }
+
+      // ── Members Grid ──
+      const membersGridEl = document.getElementById('membersGrid');
+      if (membersGridEl) {
+        const displayList = (familyData.length > 0 ? familyData : kontakData).filter(m => !m.isPlaceholder);
+        if (displayList.length === 0) {
+          membersGridEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;background:rgba(255,255,255,0.7);border-radius:var(--radius-md);border:2px dashed var(--border);">
+            <span style="font-size:32px;display:block;margin-bottom:10px;">🌳</span>
+            <p style="color:var(--text-muted);font-weight:500;margin-bottom:16px;">Silsilah keluarga belum diisi.</p>
+            ${isAdmin ? '<button class="btn-primary" onclick="window.location.href=\'silsilah.html\'">Tambah Silsilah Baru</button>' : '<p style="font-size:13px;color:var(--text-muted);">Silakan hubungi Admin untuk memperbarui silsilah.</p>'}
+          </div>`;
+        } else {
+          let mhtml = displayList.map((m, idx) => {
+            const displaySub = getMemberRelation(m, familyData.length > 0 ? familyData : kontakData);
+            return `
+              <div class="member-card" id="member-hp-${idx}" onclick="window.location.href='silsilah.html'">
+                <div class="member-avatar" style="background:${colors[idx % colors.length]};">${(m.name || 'A').charAt(0).toUpperCase()}</div>
+                <div class="member-info">
+                  <span class="member-name">${m.name || 'Belum diisi'}</span>
+                  <span class="member-role">${displaySub}</span>
+                </div>
+                <span class="member-status online"></span>
+              </div>`;
+          }).join('');
+          membersGridEl.innerHTML = mhtml;
+        }
+      }
+
+      // ── Galeri Preview ──
+      const galeriGridEl = document.getElementById('galeriGrid');
+      if (galeriGridEl) {
+        if (galeriData.length === 0) {
+          galeriGridEl.style.gridTemplateColumns = '1fr';
+          galeriGridEl.style.gridTemplateRows = 'auto';
+          galeriGridEl.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;background:rgba(255,255,255,0.7);border-radius:var(--radius-md);border:2px dashed var(--border);">
+            <span style="font-size:40px;display:block;margin-bottom:10px;">📸</span>
+            <p style="color:var(--text-muted);font-weight:500;margin-bottom:16px;">Belum ada foto kenangan keluarga.</p>
+            ${isAdmin ? '<button class="btn-primary" onclick="window.location.href=\'galeri.html\'">Tambah Foto Pertama</button>' : '<p style="font-size:13px;color:var(--text-muted);">Silakan hubungi Admin untuk memperbarui galeri.</p>'}
+          </div>`;
+        } else {
+          galeriGridEl.style.gridTemplateColumns = '';
+          galeriGridEl.style.gridTemplateRows = '';
+          const sortedG = [...galeriData].sort((a, b) => new Date(b.date) - new Date(a.date));
+          galeriGridEl.innerHTML = sortedG.slice(0, 5).map((ph, idx) => `
+            <div class="galeri-item ${idx === 0 ? 'large' : ''}" onclick="openLightbox('${ph.src}', '${ph.title.replace(/'/g, "\\'")}', '${ph.date}', '${ph.category}')">
+              <img src="${ph.src}" alt="${ph.title}" />
+              <div class="galeri-overlay">
+                <span class="galeri-label">${ph.title}</span>
+                <button class="galeri-btn" onclick="event.stopPropagation(); window.location.href='galeri.html'">Lihat →</button>
+              </div>
+            </div>`).join('');
+        }
+      }
+
+      // ── Dynamic Hero Photo Banner ──
+      const heroPhotoImg = document.querySelector('.hero-photo .photo-img');
+      if (heroPhotoImg && galeriData.length > 0) {
+        const sortedGaleri = [...galeriData].sort((a, b) => new Date(b.date) - new Date(a.date));
+        heroPhotoImg.src = sortedGaleri[0].src;
+
+        const heroPhotoTitle = document.querySelector('.hero-photo .photo-title');
+        const heroPhotoSub = document.querySelector('.hero-photo .photo-sub');
+        if (heroPhotoTitle) heroPhotoTitle.textContent = sortedGaleri[0].title;
+        if (heroPhotoSub) {
+          const d = new Date(sortedGaleri[0].date);
+          const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+          heroPhotoSub.textContent = `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+        }
+
+        const heroPhotoCard = document.querySelector('.hero-photo');
+        if (heroPhotoCard) {
+          heroPhotoCard.style.cursor = 'pointer';
+          const newHeroPhotoCard = heroPhotoCard.cloneNode(true);
+          heroPhotoCard.replaceWith(newHeroPhotoCard);
+          newHeroPhotoCard.addEventListener('click', (e) => {
+            if (e.target.id === 'btn-lihat-foto') return;
+            openLightbox(sortedGaleri[0].src, sortedGaleri[0].title, sortedGaleri[0].date, sortedGaleri[0].category);
+          });
+        }
+      }
+
+      // ── Inisialisasi Auto Scroll ──
+      const activeList = (familyData.length > 0 ? familyData : kontakData).filter(m => !m.isPlaceholder);
+      if (!window.autoScrollInitialized && activeList.length > 0) {
+        setTimeout(() => {
+          initAutoScroll();
+        }, 150);
+        window.autoScrollInitialized = true;
+      }
+    }
+
+    // Initial render from local cache
+    updateHomepageUI();
+
+    // ── FIRESTORE CLOUD REAL-TIME LISTENERS ──
+    if (typeof db !== 'undefined' && db) {
+      // 1. Silsilah cloud sync
+      db.collection('data').doc('silsilah').onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data && Array.isArray(data.list)) {
+            familyData = data.list;
+            localStorage.setItem('silsilahDataV1', JSON.stringify(familyData));
+            updateHomepageUI();
+          }
+        }
+      }, err => console.warn("Firestore homepage silsilah read failed: ", err));
+
+      // 2. Kontak cloud sync
+      db.collection('data').doc('kontak').onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data && Array.isArray(data.list)) {
+            kontakData = data.list;
+            localStorage.setItem('kontakDataV1', JSON.stringify(kontakData));
+            updateHomepageUI();
+          }
+        }
+      }, err => console.warn("Firestore homepage kontak read failed: ", err));
+
+      // 3. Galeri cloud sync
+      db.collection('data').doc('galeri').onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data && Array.isArray(data.list)) {
+            galeriData = data.list;
+            localStorage.setItem('galeriDataV1', JSON.stringify(galeriData));
+            updateHomepageUI();
+          }
+        }
+      }, err => console.warn("Firestore homepage galeri read failed: ", err));
+
+      // 4. Agenda cloud sync
+      db.collection('data').doc('agenda').onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (data && Array.isArray(data.list)) {
+            agendaData = data.list;
+            localStorage.setItem('agendaDataV1', JSON.stringify(agendaData));
+            updateHomepageUI();
+          }
+        }
+      }, err => console.warn("Firestore homepage agenda read failed: ", err));
+    }
+
+    // ── Lightbox Logic ──
+    window.openLightbox = (src, title = '', date = '', category = '') => {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxTitle = document.getElementById('lightboxTitle');
+      const lightboxDate = document.getElementById('lightboxDate');
+      const lightboxCategory = document.getElementById('lightboxCategory');
+
+      const categoryLabels = {
+        liburan: '📁 Liburan',
+        ulangtahun: '📁 Perayaan',
+        reuni: '📁 Reuni Keluarga',
+        wisuda: '📁 Momen Penting',
+        silaturahmi: '📁 Silahturahmi',
+        other: '📁 Lainnya'
+      };
+
+      lightboxImg.src = src;
+
+      if (title) {
+        lightboxTitle.textContent = title;
+        lightboxTitle.style.display = 'block';
+      } else {
+        lightboxTitle.style.display = 'none';
+      }
+
+      if (date) {
+        const d = new Date(date);
+        const dateFormatted = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        lightboxDate.textContent = dateFormatted;
+        lightboxDate.style.display = 'block';
+      } else {
+        lightboxDate.style.display = 'none';
+      }
+
+      if (category) {
+        lightboxCategory.textContent = categoryLabels[category] || '📁 Foto';
+        lightboxCategory.style.display = 'block';
+      } else {
+        lightboxCategory.style.display = 'none';
+      }
+
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+
+    // Close lightbox when clicking anywhere
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+      lightbox.onclick = () => {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      };
+    }
+  </script>
 </body>
+
 </html>

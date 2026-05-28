@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agenda Keluarga | Rumah Kita</title>
+  <link rel="icon" type="image/png" href="assets/green-tea.png" />
+  <meta name="description" content="Jadwal kegiatan dan momen penting keluarga besar — jangan sampai ketinggalan!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Detailed Agenda Page Specific Styles */
+    .agenda-hero {
+      padding: 92px 0 60px;
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, transparent 100%);
+      text-align: center;
+    }
+
+    .agenda-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .agenda-filters {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 24px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-btn.active {
+      background: var(--grad-purple);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .featured-event {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-bottom: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 32px;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .featured-event::before {
+      content: 'TERDEKAT';
+      position: absolute;
+      top: 20px;
+      right: -30px;
+      background: var(--accent-gold);
+      color: white;
+      padding: 6px 40px;
+      transform: rotate(45deg);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .event-visual {
+      height: 240px;
+      background: var(--grad-teal);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+    }
+
+    .event-details h2 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .agenda-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+    }
+
+    .agenda-timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 24px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 24px;
+      position: relative;
+      padding-left: 60px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 17px;
+      top: 12px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--accent-purple);
+      z-index: 1;
+    }
+
+    .timeline-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .timeline-card:hover {
+      transform: translateX(8px);
+      border-color: var(--accent-purple);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.08);
+    }
+
+    .timeline-date {
+      min-width: 80px;
+    }
+
+    .timeline-day {
+      font-size: 24px;
+      font-weight: 800;
+      display: block;
+      line-height: 1;
+    }
+
+    .timeline-mo {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .timeline-info {
+      flex: 1;
+      padding: 0 24px;
+    }
+
+    .timeline-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .timeline-loc {
+      font-size: 14px;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .btn-remind {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent-purple);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-remind:hover {
+      background: var(--grad-purple);
+      color: white;
+    }
+
+    .agenda-badge.announce {
+      background: rgba(59, 130, 246, 0.2);
+      color: #2563eb;
+    }
+
+    .agenda-badge.silaturahmi {
+      background: rgba(16, 185, 129, 0.2);
+      color: #059669;
+    }
+
+    .agenda-badge.other {
+      background: rgba(100, 116, 139, 0.2);
+      color: #475569;
+    }
+
+    .map-link {
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .map-link:hover {
+      color: var(--accent-teal) !important;
+      text-decoration: underline !important;
+    }
+
+    .cal-choice-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: white;
+      border: none;
+      padding: 24px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-main);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .cal-choice-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .featured-event {
+        grid-template-columns: 1fr;
+        padding: 24px;
+      }
+
+      .timeline-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .btn-remind {
+        width: 100%;
+        text-align: center;
+      }
+
+      .rsvp-grid-container {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- AUTH GUARD: Redirect ke login.html jika belum login -->
+  <script src="auth-guard.js"></script>
+
+  <!-- NAVBAR (Same as index.html) -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🏡</div>
+        <span class="logo-text">Rumah<span class="logo-accent">Kita</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Beranda</a></li>
+        <li><a href="agenda.html" class="nav-link">Agenda</a></li>
+        <li><a href="galeri.html" class="nav-link">Galeri</a></li>
+        <li><a href="silsilah.html" class="nav-link">Silsilah</a></li>
+        <li><a href="kontak.html" class="nav-link">Kontak</a></li>
+      </ul>
+      <div class="nav-actions" style="display:flex; align-items:center; gap:10px;">
+        <span id="navUserName" style="font-size:13px;font-weight:600;color:var(--text-secondary);display:none;"></span>
+        <button class="btn-login" id="btn-login" onclick="doLogout()">Keluar</button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- AGENDA HERO -->
+  <header class="agenda-hero">
+    <div class="container--small" style="max-width: 800px; margin: 0 auto; padding: 0 24px;">
+      <span class="section-eyebrow">Kalender Keluarga</span>
+      <h1 class="section-title">Jangan Lewatkan <span class="gradient-text">Momen Spesial</span></h1>
+      <p class="section-desc">Papan jadwal resmi keluarga besar untuk arisan, perayaan, dan liburan bersama. Pastikan
+        kamu hadir!</p>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="agenda-container">
+
+    <!-- Filters -->
+    <div class="agenda-filters">
+      <button class="filter-btn active">Semua Acara</button>
+      <button class="filter-btn">Bulan Ini</button>
+      <button class="filter-btn">Mendatang</button>
+      <button class="filter-btn">Pengumuman</button>
+      <button class="filter-btn">Riwayat</button>
+    </div>
+
+    <!-- Featured Next Event -->
+    <div class="featured-event">
+      <div class="event-visual">🎂</div>
+      <div class="event-details">
+        <span class="agenda-badge birthday" style="margin-bottom: 12px; display: inline-block;">Ulang Tahun</span>
+        <h2>HUT Nenek ke-80</h2>
+        <p class="section-desc" style="margin-bottom: 24px;">Perayaan hari kelahiran syukur 8 dekade Nenek tercinta.
+          Seluruh anak & cucu wajib hadir!</p>
+        <div class="event-meta" style="display: flex; gap: 32px; margin-bottom: 32px;">
+          <div class="meta-item">
+            <span style="font-size: 12px; color: var(--text-muted); display: block; font-weight: 600;">WAKTU</span>
+            <span style="font-weight: 700; color: var(--text-primary);">22 April 2026, 10:00 WIB</span>
+          </div>
+          <div class="meta-item">
+            <span style="font-size: 12px; color: var(--text-muted); display: block; font-weight: 600;">LOKASI</span>
+            <span style="font-weight: 700; color: var(--text-primary);">Restoran Bunga Manggar</span>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-konfirmasi">Konfirmasi Kehadiran</button>
+      </div>
+    </div>
+
+    <!-- Timeline List -->
+    <h3 style="margin-bottom: 32px; font-size: 22px; font-weight: 800;">Agenda Mendatang</h3>
+    <div class="agenda-timeline">
+
+      <!-- Item 1 -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">
+            <span class="timeline-day">15</span>
+            <span class="timeline-mo">APRIL</span>
+          </div>
+          <div class="timeline-info">
+            <span class="timeline-title">Arisan Bulanan Keluarga</span>
+            <span class="timeline-loc">📍 Kediaman Bpk. Budi - Jakarta Selatan</span>
+          </div>
+          <button class="btn-remind">Ingatkan Saya</button>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">
+            <span class="timeline-day">01</span>
+            <span class="timeline-mo">MEI</span>
+          </div>
+          <div class="timeline-info">
+            <span class="timeline-title">Halal Bi Halal & Reuni</span>
+            <span class="timeline-loc">📍 Villa Hijau, Puncak Pass</span>
+          </div>
+          <button class="btn-remind">Ingatkan Saya</button>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="timeline-item">
+        <div class="timeline-dot" style="border-color: var(--accent-teal);"></div>
+        <div class="timeline-card">
+          <div class="timeline-date">
+            <span class="timeline-day">12</span>
+            <span class="timeline-mo">MEI</span>
+          </div>
+          <div class="timeline-info">
+            <span class="timeline-title">Liburan Akhir Pekan</span>
+            <span class="timeline-loc">📍 Pantai Parangtritis, Yogyakarta</span>
+          </div>
+          <button class="btn-remind">Ingatkan Saya</button>
+        </div>
+      </div>
+
+      <!-- Item 4 (Finished) -->
+      <div class="timeline-item" style="opacity: 0.5;">
+        <div class="timeline-dot" style="border-color: var(--text-muted);"></div>
+        <div class="timeline-card" style="cursor: default;">
+          <div class="timeline-date">
+            <span class="timeline-day">28</span>
+            <span class="timeline-mo">MARET</span>
+          </div>
+          <div class="timeline-info">
+            <span class="timeline-title">Buka Puasa Bersama</span>
+            <span class="timeline-loc">📍 Rumah Om Roni - Depok</span>
+          </div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted);">SELESAI</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 60px;">
+      <p style="color: var(--text-muted); margin-bottom: 24px;">Punya rencana acara keluarga baru?</p>
+      <button class="btn-ghost" id="btn-usul">Usulkan Acara Baru +</button>
+    </div>
+
+  </main>
+
+  <!-- FOOTER (Same as index.html) -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-icon large">🏡</div>
+        <span class="logo-text large">Rumah<span class="logo-accent">Kita</span></span>
+        <p class="footer-tagline">Bersama dalam kasih, terhubung dalam doa.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" id="soc-wa" aria-label="WhatsApp">💬</a>
+          <a href="#" class="social-btn" id="soc-ig" aria-label="Instagram">📷</a>
+          <a href="#" class="social-btn" id="soc-yt" aria-label="YouTube">🎥</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="galeri.html">Galeri</a></li>
+          <li><a href="silsilah.html">Silsilah</a></li>
+          <li><a href="agenda.html">Agenda</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Fitur</h4>
+        <ul>
+          <li><a href="#" id="flink-kas">Kas Keluarga</a></li>
+          <li><a href="#" id="flink-cerita">Buku Cerita</a></li>
+          <li><a href="#" id="flink-pengumuman">Pengumuman</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Kontak Admin</h4>
+        <p>📱 +62 812-2007-405</p>
+        <p>📧 admin@keluarga.com</p>
+        <p>📍 Bandung, Indonesia</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RumahKita — Portal Keluarga. Dibuat dengan ❤️ untuk keluarga.</p>
+    </div>
+  </footer>
+
+  <!-- MODAL LOGIN -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" id="loginModal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-icon">🏡</div>
+      <h2 class="modal-title">Masuk ke Portal Keluarga</h2>
+      <div class="modal-form">
+        <div class="form-group">
+          <label>Email / Nomor HP</label>
+          <input type="text" id="input-email" placeholder="contoh@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Kata Sandi</label>
+          <input type="password" id="input-pass" placeholder="••••••••" />
+        </div>
+        <button class="btn-primary full" id="btn-submit-login">Masuk Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL TAMBAH AGENDA -->
+  <div class="modal-backdrop" id="addAgendaModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeAgendaModal()">✕</button>
+      <div class="modal-icon">📅</div>
+      <h2 class="modal-title">Tambah Agenda Baru</h2>
+      <div class="modal-form">
+        <form id="agendaForm">
+          <div class="form-group">
+            <label>Judul Acara</label>
+            <input type="text" id="agTitle" class="form-input" placeholder="Nama acara..." required />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label>Tanggal</label>
+              <input type="date" id="agDate" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label>Kategori</label>
+              <select id="agCategory" class="form-input">
+                <option value="birthday">🎂 Ulang Tahun</option>
+                <option value="upcoming">📅 Arisan / Rutin</option>
+                <option value="reuni">🎉 Reuni / Liburan</option>
+                <option value="announce">📢 Pengumuman</option>
+                <option value="silaturahmi">🤝 Silahturahmi Keluarga</option>
+                <option value="other">✨ Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Lokasi / Tempat</label>
+            <input type="text" id="agLoc" class="form-input" placeholder="Contoh: Rumah Pak Budi / Restoran..."
+              required />
+          </div>
+          <div class="form-group">
+            <label>Link Google Maps (Opsional)</label>
+            <input type="url" id="agMap" class="form-input"
+              placeholder="https://maps.app.goo.gl/... atau koordinat GPS..." />
+          </div>
+          <div class="form-group">
+            <label>Keterangan Tambahan (Opsional)</label>
+            <textarea id="agDesc" class="form-input" placeholder="Keterangan acara..." rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn-primary full">Simpan Agenda</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI KEHADIRAN (RSVP) -->
+  <div class="modal-backdrop" id="rsvpModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeRsvpModal()">✕</button>
+      <div class="modal-icon">🤝</div>
+      <h2 class="modal-title">Konfirmasi Kehadiran</h2>
+      <p class="modal-desc" style="margin-bottom: 20px;">Silakan isi formulir konfirmasi kehadiran Anda.</p>
+      <div class="modal-form">
+        <form id="rsvpForm">
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" id="rsvpName" class="form-input" placeholder="Nama Anda..." required />
+          </div>
+          <div class="form-group">
+            <label>Status Kehadiran</label>
+            <select id="rsvpStatus" class="form-input">
+              <option value="hadir">🟢 Hadir</option>
+              <option value="tidak">🔴 Tidak Hadir</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Keterangan Tambahan (Opsional)</label>
+            <textarea id="rsvpDesc" class="form-input" placeholder="Contoh: Bawa 2 anak / Ada keperluan lain..."
+              rows="2"></textarea>
+          </div>
+          <button type="submit" class="btn-primary full">Kirim Konfirmasi</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL REMINDER CALENDAR CHOICE -->
+  <div class="modal-backdrop" id="reminderModal">
+    <div class="modal" style="max-width: 440px;">
+      <button class="modal-close" onclick="closeReminderModal()">✕</button>
+      <div class="modal-icon">🔔</div>
+      <h2 class="modal-title">Pasang Pengingat</h2>
+      <p class="modal-desc" style="margin-bottom: 24px;">Pilih tipe kalender untuk menyimpan acara otomatis (Pengingat
+        H-1 Aktif).</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <button class="cal-choice-btn" id="btnAndroidCal"
+          style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 12px rgba(16,185,129,0.2);">
+          <span style="font-size: 32px;">🤖</span>
+          <span>Android Kalender</span>
+        </button>
+
+        <button class="cal-choice-btn" id="btnIphoneCal"
+          style="background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 4px 12px rgba(37,99,235,0.2);">
+          <span style="font-size: 32px;">🍎</span>
+          <span>IPhone Kalender</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let agendaData = JSON.parse(localStorage.getItem('agendaDataV1')) || [];
+    const getIsAdmin = () => localStorage.getItem('userRole') === 'admin';
+    // Alias for backward compat in renderAgenda
+    let isAdmin = getIsAdmin();
+
+    const saveAgenda = () => {
+      localStorage.setItem('agendaDataV1', JSON.stringify(agendaData));
+      renderAgenda();
+
+      // Cloud sync to Firestore
+      if (typeof db !== 'undefined' && db) {
+        db.collection('data').doc('agenda').set({ list: agendaData })
+          .catch(err => console.error("Firestore agenda save failed: ", err));
+      }
+    };
+
+    function renderAgenda(filter = 'all') {
+      const container = document.querySelector('.agenda-timeline');
+      const featuredContainer = document.querySelector('.featured-event');
+      const addBtnContainer = document.querySelector('.agenda-container > div[style*="text-align: center"]');
+
+      // Adjust Admin Add Button
+      isAdmin = getIsAdmin();
+      if (isAdmin) {
+        if (addBtnContainer) {
+          addBtnContainer.style.display = 'block';
+          addBtnContainer.innerHTML = `
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Kelola acara keluarga besar di sini.</p>
+            <button class="btn-primary" onclick="openAgendaModal()">Tambah Agenda Baru +</button>
+          `;
+        }
+      } else {
+        if (addBtnContainer) {
+          addBtnContainer.style.display = 'none';
+        }
+      }
+
+      if (agendaData.length === 0) {
+        featuredContainer.style.display = 'none';
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-md); border: 2px dashed var(--border);">
+            <span style="font-size: 40px;">📅</span>
+            <p style="color: var(--text-muted); margin-top: 10px; font-weight: 500;">Belum ada agenda keluarga terdekat.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Sort by date ascending
+      agendaData.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      // Filter data
+      let filteredData = agendaData;
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      if (filter === 'bulan-ini') {
+        filteredData = agendaData.filter(ev => {
+          const d = new Date(ev.date);
+          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        });
+      } else if (filter === 'mendatang') {
+        filteredData = agendaData.filter(ev => new Date(ev.date) >= now);
+      } else if (filter === 'announce') {
+        filteredData = agendaData.filter(ev => ev.category === 'announce');
+      } else if (filter === 'riwayat') {
+        filteredData = agendaData.filter(ev => new Date(ev.date) < now);
+      }
+
+      // Render Featured (First upcoming event or just first event)
+      const upcomingEvents = agendaData.filter(ev => new Date(ev.date) >= now);
+      const feat = upcomingEvents.length > 0 ? upcomingEvents[0] : agendaData[0];
+
+      if (feat && filter === 'all') {
+        featuredContainer.style.display = 'grid';
+        const categoryNames = {
+          birthday: '🎂 Ulang Tahun',
+          upcoming: '📅 Arisan / Rutin',
+          reuni: '🎉 Reuni / Liburan',
+          announce: '📢 Pengumuman',
+          silaturahmi: '🤝 Silahturahmi Keluarga',
+          other: '✨ Lainnya'
+        };
+
+        // Load RSVPs for featured event
+        const eventKey = `${feat.title}_${feat.date}`;
+        const rsvpData = JSON.parse(localStorage.getItem('agendaRsvpDataV1')) || {};
+        const eventRsvps = rsvpData[eventKey] || [];
+
+        const rsvpListHtml = eventRsvps.length > 0 ?
+          eventRsvps.map(r => `
+            <li style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: rgba(255, 255, 255, 0.6); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.015); transition: var(--transition);">
+              <div style="display: flex; flex-direction: column; gap: 4px; text-align: left;">
+                <strong style="color: var(--text-primary); font-size: 16px; font-weight: 700;">${r.name}</strong>
+                ${r.desc ? `<span style="font-size: 13px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px;">💬 ${r.desc}</span>` : ''}
+              </div>
+              <div style="flex-shrink: 0; margin-left: 16px;">
+                ${r.status === 'hadir' ?
+              `<span style="background: rgba(16,185,129,0.08); color: #10b981; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 50px; border: 1px solid rgba(16,185,129,0.15); display: inline-flex; align-items: center; gap: 6px;">🟢 Hadir</span>` :
+              `<span style="background: rgba(239,68,68,0.08); color: #ef4444; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 50px; border: 1px solid rgba(239,68,68,0.15); display: inline-flex; align-items: center; gap: 6px;">🔴 Tidak Hadir</span>`}
+              </div>
+            </li>
+          `).join('') :
+          `<li style="color: var(--text-muted); font-style: italic; padding: 32px; text-align: center; background: rgba(0,0,0,0.01); border: 1px dashed var(--border); border-radius: var(--radius-md); font-size: 14px;">Belum ada konfirmasi kehadiran dari keluarga.</li>`;
+
+        featuredContainer.innerHTML = `
+          <div class="event-visual">${feat.category === 'birthday' ? '🎂' : feat.category === 'reuni' ? '🎉' : feat.category === 'announce' ? '📢' : feat.category === 'silaturahmi' ? '🤝' : feat.category === 'other' ? '✨' : '📅'}</div>
+          <div class="event-details">
+            <span class="agenda-badge ${feat.category}" style="margin-bottom: 12px; display: inline-block;">
+              ${categoryNames[feat.category] || 'Acara'}
+            </span>
+            <h2>${feat.title}</h2>
+            <p class="section-desc" style="margin-bottom: 24px;">${feat.desc || 'Acara kumpul keluarga besar tercinta.'}</p>
+            <div class="event-meta" style="display: flex; gap: 32px; margin-bottom: 32px; flex-wrap: wrap;">
+              <div class="meta-item">
+                <span style="font-size: 12px; color: var(--text-muted); display: block; font-weight: 600;">WAKTU</span>
+                <span style="font-weight: 700; color: var(--text-primary);">${formatDateString(feat.date)}</span>
+              </div>
+              <div class="meta-item">
+                <span style="font-size: 12px; color: var(--text-muted); display: block; font-weight: 600;">LOKASI</span>
+                ${feat.mapUrl ?
+            `<a href="${feat.mapUrl}" target="_blank" style="font-weight: 700; color: var(--accent-purple);" class="map-link">📍 ${feat.loc} <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">(Peta ↗)</span></a>` :
+            `<span style="font-weight: 700; color: var(--text-primary);">📍 ${feat.loc}</span>`}
+              </div>
+            </div>
+            <button class="btn-primary" id="btn-konfirmasi" onclick="openRsvpModal('${feat.title}_${feat.date}')">Konfirmasi Kehadiran</button>
+          </div>
+
+          <!-- RSVP List Section -->
+          <div style="grid-column: 1 / -1; border-top: 1px solid var(--border); padding-top: 24px; margin-top: 24px;">
+            <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--text-primary);">
+              👥 Daftar Konfirmasi Kehadiran Keluarga
+            </h3>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0; margin: 0;">
+              ${rsvpListHtml}
+            </ul>
+          </div>
+        `;
+      } else {
+        featuredContainer.style.display = 'none';
+      }
+
+      if (filteredData.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <p style="color: var(--text-muted); font-weight: 500;">Tidak ada agenda dalam kategori ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Render List
+      let listHtml = '';
+      filteredData.forEach((ev, idx) => {
+        const d = new Date(ev.date);
+        const day = d.getDate().toString().padStart(2, '0');
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const mo = months[d.getMonth()].toUpperCase();
+        const isPast = d < now;
+
+        listHtml += `
+          <div class="timeline-item" style="${isPast ? 'opacity: 0.6;' : ''}">
+            <div class="timeline-dot" style="${ev.category === 'reuni' ? 'border-color: var(--accent-purple);' : ev.category === 'birthday' ? 'border-color: var(--accent-pink);' : ev.category === 'announce' ? 'border-color: #2563eb;' : ev.category === 'silaturahmi' ? 'border-color: #10b981;' : ev.category === 'other' ? 'border-color: #64748b;' : ''}"></div>
+            <div class="timeline-card">
+              <div class="timeline-date">
+                <span class="timeline-day">${day}</span>
+                <span class="timeline-mo">${mo}</span>
+              </div>
+              <div class="timeline-info">
+                <span class="timeline-title">${ev.title}</span>
+                ${ev.mapUrl ?
+            `<a href="${ev.mapUrl}" target="_blank" class="timeline-loc map-link" style="color: var(--accent-purple); font-weight: 600; display: inline-block;">📍 ${ev.loc} <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">(Peta ↗)</span></a>` :
+            `<span class="timeline-loc">📍 ${ev.loc}</span>`}
+              </div>
+              <div style="display: flex; gap: 12px; align-items: center;">
+                ${isPast ? '<span style="font-size: 13px; font-weight: 700; color: var(--text-muted);">SELESAI</span>' :
+            `<button class="btn-remind" onclick="openReminderModal(event, '${ev.title.replace(/'/g, "\\'")}', '${ev.date}', '${ev.loc.replace(/'/g, "\\'")}', '${(ev.desc || '').replace(/'/g, "\\'")}')">Ingatkan Saya</button>`}
+                ${getIsAdmin() ? `<button class="btn-primary" style="background: #fee2e2; color: #ef4444; border-radius: 50%; padding: 8px 12px; border: none; font-size: 14px; cursor: pointer;" onclick="deleteAgenda(event, ${idx})">✕</button>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = listHtml;
+    }
+
+    function formatDateString(dateStr) {
+      const d = new Date(dateStr);
+      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    let reminderData = null;
+
+    function openReminderModal(e, title, dateStr, loc, desc) {
+      if (e) e.stopPropagation();
+      reminderData = { title, dateStr, loc, desc };
+      document.getElementById('reminderModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeReminderModal() {
+      document.getElementById('reminderModal').classList.remove('active');
+      document.body.style.overflow = '';
+      reminderData = null;
+    }
+
+    function openGoogleCalendar(title, dateStr, loc, desc) {
+      const d = new Date(dateStr);
+      const year = d.getFullYear();
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      const startStr = `${year}${month}${day}`;
+
+      const dEnd = new Date(d);
+      dEnd.setDate(dEnd.getDate() + 1);
+      const yearEnd = dEnd.getFullYear();
+      const monthEnd = (dEnd.getMonth() + 1).toString().padStart(2, '0');
+      const dayEnd = dEnd.getDate().toString().padStart(2, '0');
+      const endStr = `${yearEnd}${monthEnd}${dayEnd}`;
+
+      const fullDesc = `🚨 PENGINGAT H-1: Harap siapkan keberangkatan Anda!\n\n${desc || 'Acara kumpul keluarga besar.'}\n\nDiingatkan oleh Portal Keluarga RumahKita`;
+
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startStr}/${endStr}&details=${encodeURIComponent(fullDesc)}&location=${encodeURIComponent(loc)}`;
+      window.open(url, '_blank');
+    }
+
+    function downloadICS(title, dateStr, loc, desc) {
+      const d = new Date(dateStr);
+      const year = d.getFullYear();
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      const startICS = `${year}${month}${day}`;
+
+      const dEnd = new Date(d);
+      dEnd.setDate(dEnd.getDate() + 1);
+      const yearEnd = dEnd.getFullYear();
+      const monthEnd = (dEnd.getMonth() + 1).toString().padStart(2, '0');
+      const dayEnd = dEnd.getDate().toString().padStart(2, '0');
+      const endICS = `${yearEnd}${monthEnd}${dayEnd}`;
+
+      const icsLines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//RumahKita//Portal Keluarga//ID',
+        'BEGIN:VEVENT',
+        `UID:${Date.now()}@rumahkita.id`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+        `DTSTART;VALUE=DATE:${startICS}`,
+        `DTEND;VALUE=DATE:${endICS}`,
+        `SUMMARY:${title}`,
+        `LOCATION:${loc}`,
+        `DESCRIPTION:${desc || 'Acara kumpul keluarga besar.'}`,
+        'BEGIN:VALARM',
+        'TRIGGER:-P1D',
+        'ACTION:DISPLAY',
+        `DESCRIPTION:Pengingat H-1: ${title}`,
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ];
+
+      const icsContent = icsLines.join('\r\n');
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${title.replace(/\s+/g, '_')}.ics`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function confirmFeat() {
+      customAlert('Kehadiran Anda telah dikonfirmasi! Sampai jumpa di sana.', 'RSVP Sukses', '✅');
+    }
+
+    async function deleteAgenda(e, idx) {
+      e.stopPropagation();
+      const confirmed = await customConfirm('Hapus agenda ini?', 'Hapus Agenda');
+      if (confirmed) {
+        agendaData.splice(idx, 1);
+        saveAgenda();
+      }
+    }
+
+    // Modal Controls
+    function openAgendaModal() {
+      document.getElementById('addAgendaModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeAgendaModal() {
+      document.getElementById('addAgendaModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('agendaForm').onsubmit = (e) => {
+      e.preventDefault();
+      const title = document.getElementById('agTitle').value;
+      const date = document.getElementById('agDate').value;
+      const category = document.getElementById('agCategory').value;
+      const loc = document.getElementById('agLoc').value;
+      const mapUrl = document.getElementById('agMap').value;
+      const desc = document.getElementById('agDesc').value;
+
+      agendaData.push({ title, date, category, loc, mapUrl, desc });
+      saveAgenda();
+      closeAgendaModal();
+      document.getElementById('agendaForm').reset();
+    };
+
+    let currentFeatKey = '';
+
+    function openRsvpModal(eventKey) {
+      currentFeatKey = eventKey;
+      document.getElementById('rsvpModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeRsvpModal() {
+      document.getElementById('rsvpModal').classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('rsvpForm').reset();
+    }
+
+    document.getElementById('rsvpForm').onsubmit = (e) => {
+      e.preventDefault();
+      const name = document.getElementById('rsvpName').value.trim();
+      const status = document.getElementById('rsvpStatus').value;
+      const desc = document.getElementById('rsvpDesc').value.trim();
+
+      if (!name) return;
+
+      let rsvpData = JSON.parse(localStorage.getItem('agendaRsvpDataV1')) || {};
+      if (!rsvpData[currentFeatKey]) {
+        rsvpData[currentFeatKey] = [];
+      }
+
+      const existingIdx = rsvpData[currentFeatKey].findIndex(r => r.name.toLowerCase() === name.toLowerCase());
+      if (existingIdx !== -1) {
+        rsvpData[currentFeatKey][existingIdx] = { name, status, desc };
+      } else {
+        rsvpData[currentFeatKey].push({ name, status, desc });
+      }
+
+      localStorage.setItem('agendaRsvpDataV1', JSON.stringify(rsvpData));
+
+      // Cloud sync to Firestore
+      if (typeof db !== 'undefined' && db) {
+        db.collection('data').doc('rsvp').set({ map: rsvpData })
+          .catch(err => console.error("Firestore rsvp save failed: ", err));
+      }
+
+      closeRsvpModal();
+      renderAgenda('all');
+    };
+
+    // Filter interaction
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const filterModes = ['all', 'bulan-ini', 'mendatang', 'announce', 'riwayat'];
+
+    filterBtns.forEach((btn, idx) => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderAgenda(filterModes[idx]);
+      });
+    });
+
+    document.getElementById('addAgendaModal').addEventListener('click', e => { if (e.target.id === 'addAgendaModal') closeAgendaModal(); });
+    document.getElementById('rsvpModal').addEventListener('click', e => { if (e.target.id === 'rsvpModal') closeRsvpModal(); });
+    document.getElementById('reminderModal').addEventListener('click', e => { if (e.target.id === 'reminderModal') closeReminderModal(); });
+
+    document.getElementById('btnAndroidCal').onclick = () => {
+      if (reminderData) {
+        openGoogleCalendar(reminderData.title, reminderData.dateStr, reminderData.loc, reminderData.desc);
+        closeReminderModal();
+      }
+    };
+
+    document.getElementById('btnIphoneCal').onclick = () => {
+      if (reminderData) {
+        downloadICS(reminderData.title, reminderData.dateStr, reminderData.loc, reminderData.desc);
+        closeReminderModal();
+      }
+    };
+    // DOMContentLoaded-safe init
+    function init() {
+      // Real-time Firestore sync for agenda
+      if (typeof db !== 'undefined' && db) {
+        db.collection('data').doc('agenda').onSnapshot((doc) => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data && Array.isArray(data.list)) {
+              agendaData = data.list;
+              localStorage.setItem('agendaDataV1', JSON.stringify(agendaData));
+              renderAgenda('all');
+            }
+          } else {
+            // Auto-migrate if Firestore is empty and we are Admin with local data
+            if (getIsAdmin() && agendaData && agendaData.length > 0) {
+              console.log("Auto-migrating agenda to cloud...");
+              db.collection('data').doc('agenda').set({ list: agendaData })
+                .catch(err => console.error("Firestore agenda auto-migrate failed: ", err));
+            }
+          }
+        }, (error) => {
+          console.warn("Firestore agenda read failed: ", error);
+        });
+
+        // Real-time Firestore sync for RSVP
+        db.collection('data').doc('rsvp').onSnapshot((doc) => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data && data.map) {
+              localStorage.setItem('agendaRsvpDataV1', JSON.stringify(data.map));
+              renderAgenda('all');
+            }
+          } else {
+            // Auto-migrate RSVP if empty
+            const localRsvp = JSON.parse(localStorage.getItem('agendaRsvpDataV1')) || {};
+            if (getIsAdmin() && Object.keys(localRsvp).length > 0) {
+              console.log("Auto-migrating rsvp to cloud...");
+              db.collection('data').doc('rsvp').set({ map: localRsvp })
+                .catch(err => console.error("Firestore rsvp auto-migrate failed: ", err));
+            }
+          }
+        }, (error) => {
+          console.warn("Firestore rsvp read failed: ", error);
+        });
+      }
+      renderAgenda('all');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => init());
+    } else {
+      init();
+    }
+  </script>
+</body>
+
+</html>

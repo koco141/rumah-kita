@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galeri Kenangan | Rumah Kita</title>
+  <link rel="icon" type="image/png" href="assets/green-tea.png" />
+  <meta name="description" content="Koleksi foto dan momen berharga keluarga besar — setiap gambar bercerita." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .galeri-hero {
+      padding: 92px 0 40px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(52, 211, 153, 0.05) 0%, transparent 100%);
+    }
+
+    .galeri-filters {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-btn.active {
+      background: var(--grad-purple);
+      color: white;
+      border-color: transparent;
+    }
+
+    .full-galeri-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding-bottom: 80px;
+    }
+
+    .photo-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      border-color: var(--accent-purple);
+    }
+
+    .photo-box {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .photo-card:hover .photo-box img {
+      transform: scale(1.1);
+    }
+
+    .photo-info {
+      padding: 20px;
+      background: var(--bg-card);
+      position: relative;
+      z-index: 1;
+      display: block !important;
+      border-top: 1px solid var(--border);
+    }
+
+    .photo-date {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-purple);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .photo-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .photo-category {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .photo-overlay-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: var(--transition);
+    }
+
+    .photo-card:hover .photo-overlay-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .full-galeri-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- AUTH GUARD: Redirect ke login.html jika belum login -->
+  <script src="auth-guard.js"></script>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🏡</div>
+        <span class="logo-text">Rumah<span class="logo-accent">Kita</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Beranda</a></li>
+        <li><a href="agenda.html" class="nav-link">Agenda</a></li>
+        <li><a href="galeri.html" class="nav-link active">Galeri</a></li>
+        <li><a href="silsilah.html" class="nav-link">Silsilah</a></li>
+        <li><a href="kontak.html" class="nav-link">Kontak</a></li>
+      </ul>
+      <div class="nav-actions" style="display:flex; align-items:center; gap:10px;">
+        <span id="navUserName" style="font-size:13px;font-weight:600;color:var(--text-secondary);display:none;"></span>
+        <button class="btn-login" id="btnLoginNav" onclick="doLogout()">Keluar</button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="galeri-hero">
+    <div class="container" style="max-width: 800px;">
+      <span class="section-eyebrow">Album Digital</span>
+      <h1 class="section-title">Koleksi <span class="gradient-text">Momen Berharga</span></h1>
+      <p class="section-desc">Simpan setiap tawa dan pelukan dalam bentuk gambar agar kenangannya abadi sepanjang masa.
+      </p>
+    </div>
+  </header>
+
+  <!-- FILTERS -->
+  <div class="container">
+    <div class="galeri-filters">
+      <button class="filter-btn active" data-filter="all">Semua Foto</button>
+      <button class="filter-btn" data-filter="liburan">Liburan</button>
+      <button class="filter-btn" data-filter="ulangtahun">Ulang Tahun</button>
+      <button class="filter-btn" data-filter="reuni">Reuni</button>
+      <button class="filter-btn" data-filter="wisuda">Wisuda</button>
+      <button class="filter-btn" data-filter="silaturahmi">Silahturahmi</button>
+      <button class="filter-btn" data-filter="other">Lainnya</button>
+    </div>
+
+    <!-- Admin Add Photo Trigger -->
+    <div id="adminAddPhotoContainer" style="text-align: center; margin-bottom: 30px; display: none;">
+      <button class="btn-primary" onclick="openPhotoModal()">Tambah Foto Baru +</button>
+    </div>
+
+    <!-- GRID -->
+    <div class="full-galeri-grid"></div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-close" id="lightboxClose">✕</div>
+    <div class="lightbox-content">
+      <div class="lightbox-card">
+        <div class="lightbox-img-wrapper">
+          <img src="" alt="View Photo" class="lightbox-img" id="lightboxImg" />
+        </div>
+        <div class="lightbox-info">
+          <span class="lightbox-date" id="lightboxDate"></span>
+          <h3 class="lightbox-title" id="lightboxTitle"></h3>
+          <span class="lightbox-category" id="lightboxCategory"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL TAMBAH FOTO -->
+  <div class="modal-backdrop" id="addPhotoModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closePhotoModal()">✕</button>
+      <div class="modal-icon">🖼️</div>
+      <h2 class="modal-title">Tambah Foto Baru</h2>
+      <div class="modal-form">
+        <form id="photoForm" style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="form-group">
+            <label>Judul Momen</label>
+            <input type="text" id="phTitle" class="form-input" placeholder="Contoh: Liburan Keluarga 2026..."
+              required />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label>Tanggal Momen</label>
+              <input type="date" id="phDate" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label>Kategori</label>
+              <select id="phCategory" class="form-input">
+                <option value="liburan">🏖️ Liburan</option>
+                <option value="ulangtahun">🎂 Ulang Tahun</option>
+                <option value="reuni">🎉 Reuni</option>
+                <option value="wisuda">🎓 Wisuda</option>
+                <option value="silaturahmi">🤝 Silahturahmi</option>
+                <option value="other">✨ Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Unggah Gambar (Pilih File)</label>
+            <input type="file" id="phFile" class="form-input" accept="image/*" />
+            <small style="color: var(--text-muted); display: block; margin-top: 4px;">Atau gunakan URL gambar di
+              bawah:</small>
+          </div>
+          <div class="form-group">
+            <label>Atau URL Gambar</label>
+            <input type="text" id="phUrl" class="form-input" placeholder="https://..." />
+          </div>
+          <button type="submit" class="btn-primary"
+            style="margin: 12px auto 0; padding: 12px 32px; font-size: 14px; width: fit-content; align-self: center;">Simpan
+            Foto</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-icon large">🏡</div>
+        <span class="logo-text large">Rumah<span class="logo-accent">Kita</span></span>
+        <p class="footer-tagline">Bersama dalam kasih, terhubung dalam doa.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" id="soc-wa" aria-label="WhatsApp">💬</a>
+          <a href="#" class="social-btn" id="soc-ig" aria-label="Instagram">📷</a>
+          <a href="#" class="social-btn" id="soc-yt" aria-label="YouTube">🎥</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="galeri.html">Galeri</a></li>
+          <li><a href="silsilah.html">Silsilah</a></li>
+          <li><a href="agenda.html">Agenda</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Fitur</h4>
+        <ul>
+          <li><a href="#" id="flink-kas">Kas Keluarga</a></li>
+          <li><a href="#" id="flink-cerita">Buku Cerita</a></li>
+          <li><a href="#" id="flink-pengumuman">Pengumuman</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Kontak Admin</h4>
+        <p>📱 +62 812-2007-405</p>
+        <p>📧 admin@keluarga.com</p>
+        <p>📍 Bandung, Indonesia</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RumahKita — Portal Keluarga. Dibuat dengan ❤️ untuk keluarga.</p>
+    </div>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let galeriData = JSON.parse(localStorage.getItem('galeriDataV1')) || [];
+    const getIsAdmin = () => localStorage.getItem('userRole') === 'admin';
+    let isAdmin = getIsAdmin();
+
+    const saveGaleri = () => {
+      localStorage.setItem('galeriDataV1', JSON.stringify(galeriData));
+      renderGaleri();
+
+      // Cloud sync to Firestore
+      if (typeof db !== 'undefined' && db) {
+        db.collection('data').doc('galeri').set({ list: galeriData })
+          .catch(err => console.error("Firestore galeri save failed: ", err));
+      }
+    };
+
+    function renderGaleri(filter = 'all') {
+      const container = document.querySelector('.full-galeri-grid');
+      const addBtnContainer = document.getElementById('adminAddPhotoContainer');
+
+      // Admin Add Button Toggle
+      isAdmin = getIsAdmin();
+      if (isAdmin) {
+        addBtnContainer.style.display = 'block';
+      } else {
+        addBtnContainer.style.display = 'none';
+      }
+
+      if (galeriData.length === 0) {
+        container.style.gridTemplateColumns = '1fr';
+        container.innerHTML = `
+          <div style="text-align: center; padding: 60px; background: white; border-radius: var(--radius-md); border: 2px dashed var(--border);">
+            <span style="font-size: 50px;">🖼️</span>
+            <p style="color: var(--text-muted); margin-top: 15px; font-weight: 500;">Belum ada foto kenangan yang diunggah.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.style.gridTemplateColumns = ''; // reset to default
+
+      // Sort by date descending
+      galeriData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Filter
+      let filteredData = galeriData;
+      if (filter !== 'all') {
+        filteredData = galeriData.filter(ph => ph.category === filter);
+      }
+
+      if (filteredData.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-md); border: 1px solid var(--border); width: 100%;">
+            <p style="color: var(--text-muted); font-weight: 500;">Tidak ada foto dalam kategori ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      const categoryLabels = {
+        liburan: '📁 Liburan',
+        ulangtahun: '📁 Perayaan',
+        reuni: '📁 Reuni Keluarga',
+        wisuda: '📁 Momen Penting',
+        silaturahmi: '📁 Silahturahmi',
+        other: '📁 Lainnya'
+      };
+
+      filteredData.forEach((ph, idx) => {
+        const dateFormatted = new Date(ph.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        html += `
+          <div class="photo-card" data-category="${ph.category}" onclick="openLightbox('${ph.src}', '${ph.title.replace(/'/g, "\\'")}', '${ph.date}', '${ph.category}')">
+            <div class="photo-box">
+              <img src="${ph.src}" alt="${ph.title}" />
+              <div class="photo-overlay-btn">🔍</div>
+              ${getIsAdmin() ? `
+                <button onclick="deletePhoto(event, ${idx})" style="position: absolute; top: 16px; left: 16px; background: #fee2e2; color: #ef4444; border-radius: 50%; width: 36px; height: 36px; border: none; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" title="Hapus Foto">✕</button>
+              ` : ''}
+            </div>
+            <div class="photo-info">
+              <span class="photo-date">${dateFormatted}</span>
+              <h3 class="photo-title">${ph.title}</h3>
+              <span class="photo-category">${categoryLabels[ph.category] || '📁 Foto'}</span>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    window.openLightbox = (src, title = '', date = '', category = '') => {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxTitle = document.getElementById('lightboxTitle');
+      const lightboxDate = document.getElementById('lightboxDate');
+      const lightboxCategory = document.getElementById('lightboxCategory');
+
+      const categoryLabels = {
+        liburan: '📁 Liburan',
+        ulangtahun: '📁 Perayaan',
+        reuni: '📁 Reuni Keluarga',
+        wisuda: '📁 Momen Penting',
+        silaturahmi: '📁 Silahturahmi',
+        other: '📁 Lainnya'
+      };
+
+      lightboxImg.src = src;
+
+      if (title) {
+        lightboxTitle.textContent = title;
+        lightboxTitle.style.display = 'block';
+      } else {
+        lightboxTitle.style.display = 'none';
+      }
+
+      if (date) {
+        const d = new Date(date);
+        const dateFormatted = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        lightboxDate.textContent = dateFormatted;
+        lightboxDate.style.display = 'block';
+      } else {
+        lightboxDate.style.display = 'none';
+      }
+
+      if (category) {
+        lightboxCategory.textContent = categoryLabels[category] || '📁 Foto';
+        lightboxCategory.style.display = 'block';
+      } else {
+        lightboxCategory.style.display = 'none';
+      }
+
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.deletePhoto = async (e, idx) => {
+      e.stopPropagation();
+      const confirmed = await customConfirm('Hapus foto ini dari galeri?', 'Hapus Foto');
+      if (confirmed) {
+        galeriData.splice(idx, 1);
+        saveGaleri();
+      }
+    };
+
+    // Modal controls
+    window.openPhotoModal = () => {
+      document.getElementById('addPhotoModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closePhotoModal = () => {
+      document.getElementById('addPhotoModal').classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('photoForm').reset();
+    };
+
+    document.getElementById('photoForm').onsubmit = (e) => {
+      e.preventDefault();
+      const title = document.getElementById('phTitle').value;
+      const date = document.getElementById('phDate').value;
+      const category = document.getElementById('phCategory').value;
+      const urlInput = document.getElementById('phUrl').value;
+      const fileInput = document.getElementById('phFile').files[0];
+
+      if (fileInput) {
+        const maxSizeBytes = 1 * 1024 * 1024; // 1 MB
+        if (fileInput.size > maxSizeBytes) {
+          customAlert('Ukuran foto terlalu besar! Maksimal ukuran foto adalah 1 MB agar kapasitas penyimpanan galeri tahan lama dan website dimuat lebih cepat.', 'Ukuran Foto Terlalu Besar', '⚠️');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          const base64Url = evt.target.result;
+          galeriData.push({ title, date, category, src: base64Url });
+          saveGaleri();
+          closePhotoModal();
+        };
+        reader.readAsDataURL(fileInput);
+      } else if (urlInput) {
+        galeriData.push({ title, date, category, src: urlInput });
+        saveGaleri();
+        closePhotoModal();
+      } else {
+        customAlert('Mohon pilih file gambar atau masukkan URL gambar!', 'Peringatan', '⚠️');
+      }
+    };
+
+    // Filter controls
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGaleri(btn.getAttribute('data-filter'));
+      });
+    });
+
+    // Close lightbox when clicking anywhere (close button, background, or the image itself)
+    const lightbox = document.getElementById('lightbox');
+    lightbox.onclick = () => {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    document.getElementById('addPhotoModal').addEventListener('click', e => { if (e.target.id === 'addPhotoModal') closePhotoModal(); });
+    // DOMContentLoaded-safe init
+    function init() {
+      // Real-time Firestore sync
+      if (typeof db !== 'undefined' && db) {
+        db.collection('data').doc('galeri').onSnapshot((doc) => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data && Array.isArray(data.list)) {
+              galeriData = data.list;
+              localStorage.setItem('galeriDataV1', JSON.stringify(galeriData));
+              renderGaleri('all');
+            }
+          } else {
+            // Auto-migrate if Firestore is empty and we are Admin with local data
+            if (getIsAdmin() && galeriData && galeriData.length > 0) {
+              console.log("Auto-migrating galeri to cloud...");
+              db.collection('data').doc('galeri').set({ list: galeriData })
+                .catch(err => console.error("Firestore galeri auto-migrate failed: ", err));
+            }
+          }
+        }, (error) => {
+          console.warn("Firestore galeri read failed: ", error);
+        });
+      }
+      renderGaleri('all');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => init());
+    } else {
+      init();
+    }
+  </script>
+</body>
+
+</html>

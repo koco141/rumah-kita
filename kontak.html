@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buku Telepon Keluarga | Rumah Kita</title>
+  <link rel="icon" type="image/png" href="assets/green-tea.png" />
+  <meta name="description"
+    content="Daftar kontak seluruh anggota keluarga besar. Terhubung lebih mudah melalui WhatsApp." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .kontak-hero {
+      padding: 92px 0 40px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+    }
+
+    .yellow-pages-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px 100px;
+    }
+
+    .family-group {
+      margin-bottom: 48px;
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 2px solid var(--accent-teal);
+      margin-bottom: 20px;
+      position: sticky;
+      top: 70px;
+      background: #f8fafc;
+      z-index: 10;
+    }
+
+    .group-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+      scroll-margin-top: 150px;
+      /* Better scroll alignment */
+    }
+
+    .contact-item:hover {
+      border-color: var(--accent-purple);
+      transform: translateX(8px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-item.highlight {
+      border-color: var(--accent-purple);
+      background: rgba(139, 92, 246, 0.05);
+      animation: pulseHighlight 2s infinite;
+    }
+
+    @keyframes pulseHighlight {
+      0% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+      }
+    }
+
+    .contact-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .contact-avatar {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-card2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .contact-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .contact-role {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-wa {
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .btn-wa:hover {
+      background: #128C7E;
+      transform: scale(1.05);
+    }
+
+    .btn-call {
+      width: 36px;
+      height: 36px;
+      border: 1px solid #e2e8f0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-call:hover {
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+    }
+
+    .search-bar-container {
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 16px 24px 16px 48px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      font-family: var(--font-main);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-purple);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .contact-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .contact-actions {
+        width: 100%;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 12px;
+      }
+
+      .btn-wa {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
+    .print-only-table-container {
+      display: none;
+    }
+
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        font-size: 11px !important;
+      }
+
+      .navbar,
+      .kontak-hero,
+      .search-bar-container,
+      .contact-top-actions,
+      .contact-actions,
+      .footer,
+      .btn-primary,
+      #contactsContainer {
+        display: none !important;
+      }
+
+      .yellow-pages-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+      }
+
+      .print-header {
+        display: block !important;
+        margin-bottom: 20px !important;
+      }
+
+      .print-only-table-container {
+        display: block !important;
+        width: 100% !important;
+      }
+
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-family: 'Outfit', sans-serif;
+      }
+
+      .print-table th,
+      .print-table td {
+        border: 1px solid #cbd5e1;
+        padding: 6px 10px;
+        text-align: left;
+      }
+
+      .print-table th {
+        background-color: #f1f5f9 !important;
+        color: #1e293b;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 10px;
+        letter-spacing: 0.5px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .print-table tr {
+        page-break-inside: avoid;
+      }
+
+      .print-table td {
+        color: #334155;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- AUTH GUARD: Redirect ke login.html jika belum login -->
+  <script src="auth-guard.js"></script>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🏡</div>
+        <span class="logo-text">Rumah<span class="logo-accent">Kita</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Beranda</a></li>
+        <li><a href="agenda.html" class="nav-link">Agenda</a></li>
+        <li><a href="galeri.html" class="nav-link">Galeri</a></li>
+        <li><a href="silsilah.html" class="nav-link">Silsilah</a></li>
+        <li><a href="kontak.html" class="nav-link active">Kontak</a></li>
+      </ul>
+      <div class="nav-actions" style="display:flex; align-items:center; gap:10px;">
+        <span id="navUserName" style="font-size:13px;font-weight:600;color:var(--text-secondary);display:none;"></span>
+        <button class="btn-login" id="btn-login" onclick="doLogout()">Keluar</button>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="kontak-hero">
+    <div class="container" style="max-width: 800px;">
+      <span class="section-eyebrow">Direktori Keluarga</span>
+      <h1 class="section-title">Buku <span class="gradient-text">Kontak Digital</span></h1>
+      <p class="section-desc">Cari dan hubungi kerabat dengan satu klik. Terhubung lebih dekat dalam satu sentuhan jari.
+      </p>
+    </div>
+  </header>
+
+  <main class="yellow-pages-container">
+
+    <div class="print-header" style="display: none;">
+      <h1
+        style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 5px;">
+        BUKU KONTAK KELUARGA BESAR</h1>
+      <p
+        style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 12px; color: #475569; margin-bottom: 30px;">
+        RumahKita — Portal Keluarga Besar</p>
+    </div>
+
+    <div class="search-bar-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Cari nama atau keluarga..." />
+    </div>
+
+    <!-- Action Buttons (Export is for everyone, Add is for admin only) -->
+    <div class="contact-top-actions"
+      style="display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; flex-wrap: wrap;">
+      <button class="btn-ghost" id="btnExportPDF" onclick="window.print()"
+        style="padding: 10px 24px; font-size: 14px; font-weight: 700; border-radius: 50px; display: flex; align-items: center; gap: 8px;">📄
+        Ekspor ke PDF</button>
+      <button class="btn-primary" id="adminAddContact" onclick="openContactModal()"
+        style="display: none; padding: 10px 24px; font-size: 14px; font-weight: 700; border-radius: 50px;">Tambah Kontak
+        Baru +</button>
+    </div>
+
+    <!-- DYNAMIC CONTAINER -->
+    <div id="contactsContainer"></div>
+
+    <!-- PRINT ONLY TABLE CONTAINER -->
+    <div id="printOnlyTableContainer" class="print-only-table-container"></div>
+
+  </main>
+
+  <!-- MODAL TAMBAH KONTAK -->
+  <div class="modal-backdrop" id="addContactModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeContactModal()">✕</button>
+      <div class="modal-icon">📞</div>
+      <h2 class="modal-title">Tambah Kontak Baru</h2>
+      <div class="modal-form">
+        <form id="contactForm">
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" id="coName" class="form-input" placeholder="Nama lengkap..." required />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+              <label>Peran / Hubungan</label>
+              <input type="text" id="coRole" class="form-input" placeholder="Contoh: Anak Pertama, Kakek..." required />
+            </div>
+            <div class="form-group">
+              <label>Avatar / Ikon</label>
+              <select id="coAvatar" class="form-input">
+                <option value="👨">👨 Pria</option>
+                <option value="👩">👩 Wanita</option>
+                <option value="👦">👦 Anak Laki-laki</option>
+                <option value="👧">👧 Anak Perempuan</option>
+                <option value="👴">👴 Kakek</option>
+                <option value="👵">👵 Nenek</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nama Keluarga (Grup)</label>
+            <input type="text" id="coFamilyGroup" class="form-input" placeholder="Contoh: Keluarga Pak Budi, Sesepuh..."
+              required />
+          </div>
+          <div class="form-group">
+            <label>Nomor WhatsApp</label>
+            <input type="text" id="coPhone" class="form-input" placeholder="Contoh: 6281234567890 (Gunakan kode negara)"
+              required />
+          </div>
+          <button type="submit" class="btn-primary full">Simpan Kontak</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo-icon large">🏡</div>
+        <span class="logo-text large">Rumah<span class="logo-accent">Kita</span></span>
+        <p class="footer-tagline">Bersama dalam kasih, terhubung dalam doa.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" id="soc-wa" aria-label="WhatsApp">💬</a>
+          <a href="#" class="social-btn" id="soc-ig" aria-label="Instagram">📷</a>
+          <a href="#" class="social-btn" id="soc-yt" aria-label="YouTube">🎥</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="galeri.html">Galeri</a></li>
+          <li><a href="silsilah.html">Silsilah</a></li>
+          <li><a href="agenda.html">Agenda</a></li>
+          <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Fitur</h4>
+        <ul>
+          <li><a href="#" id="flink-kas">Kas Keluarga</a></li>
+          <li><a href="#" id="flink-cerita">Buku Cerita</a></li>
+          <li><a href="#" id="flink-pengumuman">Pengumuman</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Kontak Admin</h4>
+        <p>📱 +62 812-2007-405</p>
+        <p>📧 admin@keluarga.com</p>
+        <p>📍 Bandung, Indonesia</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 RumahKita — Portal Keluarga. Dibuat dengan ❤️ untuk keluarga.</p>
+    </div>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let kontakData = JSON.parse(localStorage.getItem('kontakDataV1')) || [];
+    const getIsAdmin = () => localStorage.getItem('userRole') === 'admin';
+    let isAdmin = getIsAdmin();
+
+    function syncFromSilsilah() {
+      const familyData = JSON.parse(localStorage.getItem('silsilahDataV1')) || [];
+      let updated = false;
+
+      // 1. Remove silsilah contacts that no longer exist in silsilahDataV1 or are placeholders
+      const prevLength = kontakData.length;
+      kontakData = kontakData.filter(c => {
+        if (!c.silsilahId) return true;
+        const exists = familyData.find(m => m.id === c.silsilahId && !m.isPlaceholder);
+        return !!exists;
+      });
+      if (kontakData.length !== prevLength) updated = true;
+
+      // 2. Add or update silsilah members
+      familyData.forEach(m => {
+        if (m.isPlaceholder) return;
+
+        let c = kontakData.find(x => x.silsilahId === m.id);
+        const avatar = m.gender === 'f' ? '👩' : '👨';
+        const phone = m.phone || '';
+        const role = m.role || 'Anggota';
+        const name = m.name || 'Belum diisi';
+
+        let familyGroup = 'Silsilah Keluarga';
+        if (m.parentId) {
+          const parent = familyData.find(x => x.id === m.parentId);
+          if (parent && parent.name && parent.name !== 'Belum diisi') {
+            familyGroup = `Keluarga ${parent.name}`;
+          }
+        } else {
+          if (m.role === 'Pasangan') {
+            const primarySpouse = familyData.find(x => x.spouseId === m.id);
+            if (primarySpouse && primarySpouse.name && primarySpouse.name !== 'Belum diisi') {
+              familyGroup = `Keluarga ${primarySpouse.name}`;
+            }
+          } else {
+            familyGroup = `Keluarga ${name}`;
+          }
+        }
+
+        if (c) {
+          if (c.name !== name || c.role !== role || c.avatar !== avatar || c.phone !== phone || c.familyGroup !== familyGroup) {
+            c.name = name;
+            c.role = role;
+            c.avatar = avatar;
+            c.phone = phone;
+            c.familyGroup = familyGroup;
+            updated = true;
+          }
+        } else {
+          kontakData.push({
+            silsilahId: m.id,
+            name,
+            role,
+            avatar,
+            familyGroup,
+            phone
+          });
+          updated = true;
+        }
+      });
+
+      if (updated) {
+        localStorage.setItem('kontakDataV1', JSON.stringify(kontakData));
+      }
+    }
+
+    // Run sync before rendering
+    syncFromSilsilah();
+
+    const saveKontak = () => {
+      localStorage.setItem('kontakDataV1', JSON.stringify(kontakData));
+      renderKontak();
+
+      // Cloud sync to Firestore
+      if (typeof db !== 'undefined' && db) {
+        db.collection('data').doc('kontak').set({ list: kontakData })
+          .catch(err => console.error("Firestore kontak save failed: ", err));
+      }
+    };
+
+    function renderKontak() {
+      const container = document.getElementById('contactsContainer');
+      const addBtn = document.getElementById('adminAddContact');
+
+      // Admin Add Button Toggle
+      isAdmin = getIsAdmin();
+      if (addBtn) {
+        addBtn.style.display = isAdmin ? 'inline-block' : 'none';
+      }
+
+      if (kontakData.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 60px; background: white; border-radius: var(--radius-md); border: 2px dashed var(--border);">
+            <span style="font-size: 50px;">📞</span>
+            <p style="color: var(--text-muted); margin-top: 15px; font-weight: 500;">Buku kontak masih kosong.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Find the name of the Luhur dynamically to replace generic "Silsilah Keluarga"
+      let luhurName = 'Aman Sumadiwirja'; // Fallback
+      const luhurContact = kontakData.find(c => c.role && c.role.toLowerCase() === 'luhur');
+      if (luhurContact) {
+        luhurName = luhurContact.name;
+      }
+
+      // Group contacts by Family Group
+      const groups = {};
+      kontakData.forEach((co, idx) => {
+        let grpName = co.familyGroup || 'Lainnya';
+        if (grpName === 'Silsilah Keluarga') {
+          grpName = `Keluarga ${luhurName}`;
+        }
+        if (!groups[grpName]) groups[grpName] = [];
+        groups[grpName].push({ ...co, realIndex: idx });
+      });
+
+      let html = '';
+      Object.entries(groups).forEach(([grpName, members]) => {
+        // Group Header Icon
+        let grpIcon = '👨‍👩‍👧';
+        const lowerGrp = grpName.toLowerCase();
+        if (lowerGrp.includes('sesepuh') || lowerGrp.includes('luhur') || lowerGrp.includes('silsilah') || lowerGrp.includes('aman')) grpIcon = '🌱';
+        else if (lowerGrp.includes('doni') || lowerGrp.includes('dani')) grpIcon = '👨‍👩‍👦‍👦';
+        else if (lowerGrp.includes('rina') || lowerGrp.includes('ajeng') || lowerGrp.includes('ana')) grpIcon = '👩‍👩‍👦';
+
+        const groupId = 'group-' + grpName.replace(/\s+/g, '-').toLowerCase();
+
+        html += `
+          <div class="family-group" id="${groupId}">
+            <div class="group-header">
+              <span class="logo-icon" style="width:32px; height:32px; font-size:16px;">${grpIcon}</span>
+              <h2 class="group-title">${grpName}</h2>
+            </div>
+            <div class="contact-list">
+        `;
+
+        members.forEach(m => {
+          // Check if this contact has their own family group
+          const ownGroupName = `Keluarga ${m.name}`;
+          const cleanOwnGroup = ownGroupName.replace(/\s+/g, ' ').trim().toLowerCase();
+
+          const hasOwnGroup = kontakData.some(c => {
+            let cg = c.familyGroup || '';
+            if (cg === 'Silsilah Keluarga') cg = `Keluarga ${luhurName}`;
+            return cg.replace(/\s+/g, ' ').trim().toLowerCase() === cleanOwnGroup;
+          });
+
+          const scrollTargetGroup = hasOwnGroup ? ownGroupName : grpName;
+          const grpNameEscaped = scrollTargetGroup.replace(/'/g, "\\'");
+          const linkAttr = ` onclick="scrollToGroup('${grpNameEscaped}', ${m.realIndex})" style="cursor: pointer;" title="Klik untuk fokus ke grup keluarga ${scrollTargetGroup}"`;
+
+          html += `
+            <div class="contact-item" id="member-${m.realIndex}">
+              <div class="contact-info"${linkAttr}>
+                <div class="contact-avatar">${m.avatar || '👤'}</div>
+                <div>
+                  <span class="contact-name" style="text-decoration: underline dashed rgba(16, 185, 129, 0.55);">${m.name}</span>
+                  <span class="contact-role">${m.role}</span>
+                </div>
+              </div>
+              <div class="contact-actions" style="display: flex; gap: 8px; align-items: center;">
+                ${m.phone && m.phone.trim() ? `
+                  <a href="https://wa.me/${m.phone.replace(/[^0-9]/g, '')}" target="_blank" class="btn-wa">📱 WhatsApp</a>
+                ` : `
+                  <span class="btn-wa" style="background: #e2e8f0; color: #94a3b8; cursor: not-allowed; opacity: 0.6; transform: none; pointer-events: none;" title="Nomor WhatsApp belum diisi">📱 WhatsApp</span>
+                `}
+                ${getIsAdmin() ? `
+                  <button class="btn-primary" style="background: #e0f2fe; color: #0369a1; border-radius: 50%; width: 36px; height: 36px; border: none; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;" onclick="openContactModal(${m.realIndex})">✏️</button>
+                  <button class="btn-primary" style="background: #fee2e2; color: #ef4444; border-radius: 50%; width: 36px; height: 36px; border: none; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold;" onclick="deleteContact(event, ${m.realIndex})">✕</button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+
+      // Generate Print-Only Table
+      const printContainer = document.getElementById('printOnlyTableContainer');
+      if (printContainer) {
+        let tableHtml = `
+          <table class="print-table">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Nama Keluarga</th>
+                <th style="width: 30%;">Nama Lengkap</th>
+                <th style="width: 25%;">Status (Anak ke-x / Peran)</th>
+                <th style="width: 20%;">Nomor Telepon</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        Object.entries(groups).forEach(([grpName, members]) => {
+          members.forEach(m => {
+            const phoneStr = m.phone && m.phone.trim() ? `+${m.phone.replace(/[^0-9]/g, '')}` : '—';
+            tableHtml += `
+              <tr>
+                <td><strong>${grpName}</strong></td>
+                <td>${m.name}</td>
+                <td>${m.role || 'Anggota'}</td>
+                <td>${phoneStr}</td>
+              </tr>
+            `;
+          });
+        });
+
+        tableHtml += `
+            </tbody>
+          </table>
+        `;
+        printContainer.innerHTML = tableHtml;
+      }
+    }
+
+    window.scrollToGroup = (groupName, realIndex) => {
+      // 1. Clear search input if there is search query active
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput && searchInput.value.trim() !== '') {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+      }
+
+      // 2. Scroll smoothly to the group div
+      const groupId = 'group-' + groupName.replace(/\s+/g, '-').toLowerCase();
+      const element = document.getElementById(groupId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // 3. Temporarily highlight the item for visual feedback
+        const contactItem = document.getElementById(`member-${realIndex}`);
+        if (contactItem) {
+          contactItem.classList.add('highlight');
+          setTimeout(() => {
+            contactItem.classList.remove('highlight');
+          }, 2500);
+        }
+      }
+    };
+
+    window.deleteContact = async (e, idx) => {
+      e.stopPropagation();
+      const target = kontakData[idx];
+      const confirmed = await customConfirm(`Hapus kontak ${target.name}?`, 'Hapus Kontak');
+      if (confirmed) {
+        if (target.silsilahId) {
+          // Sync deletion/clear to silsilahDataV1
+          let silsilahData = JSON.parse(localStorage.getItem('silsilahDataV1')) || [];
+          const m = silsilahData.find(x => x.id === target.silsilahId);
+          if (m) {
+            m.phone = ''; // clear phone number in silsilah
+            localStorage.setItem('silsilahDataV1', JSON.stringify(silsilahData));
+            // Cloud sync back to Firestore for silsilah on deletion
+            if (typeof db !== 'undefined' && db) {
+              db.collection('data').doc('silsilah').set({ list: silsilahData })
+                .catch(err => console.error("Firestore silsilah deletion sync-back failed: ", err));
+            }
+          }
+        }
+        kontakData.splice(idx, 1);
+        saveKontak();
+      }
+    };
+
+    // Modal controls
+    let editContactIdx = null;
+
+    window.openContactModal = (idx = null) => {
+      const modal = document.getElementById('addContactModal');
+      const title = modal.querySelector('.modal-title');
+      const submitBtn = modal.querySelector('button[type="submit"]');
+
+      if (idx !== null) {
+        editContactIdx = idx;
+        const target = kontakData[idx];
+        title.textContent = "Edit Kontak";
+        submitBtn.textContent = "Simpan Perubahan";
+
+        document.getElementById('coName').value = target.name || '';
+        document.getElementById('coRole').value = target.role || '';
+        document.getElementById('coAvatar').value = target.avatar || '👨';
+        document.getElementById('coFamilyGroup').value = target.familyGroup || '';
+        document.getElementById('coPhone').value = target.phone || '';
+      } else {
+        editContactIdx = null;
+        title.textContent = "Tambah Kontak Baru";
+        submitBtn.textContent = "Simpan Kontak";
+        document.getElementById('contactForm').reset();
+      }
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeContactModal = () => {
+      document.getElementById('addContactModal').classList.remove('active');
+      document.body.style.overflow = '';
+      document.getElementById('contactForm').reset();
+      editContactIdx = null;
+    };
+
+    document.getElementById('contactForm').onsubmit = (e) => {
+      e.preventDefault();
+      const name = document.getElementById('coName').value.trim();
+      const role = document.getElementById('coRole').value.trim();
+      const avatar = document.getElementById('coAvatar').value;
+      const familyGroup = document.getElementById('coFamilyGroup').value.trim();
+      const phone = document.getElementById('coPhone').value.trim();
+
+      if (editContactIdx !== null) {
+        // Edit Mode
+        const target = kontakData[editContactIdx];
+        target.name = name;
+        target.role = role;
+        target.avatar = avatar;
+        target.familyGroup = familyGroup;
+        target.phone = phone;
+
+        if (target.silsilahId) {
+          let silsilahData = JSON.parse(localStorage.getItem('silsilahDataV1')) || [];
+          const m = silsilahData.find(x => x.id === target.silsilahId);
+          if (m) {
+            m.name = name;
+            m.role = role;
+            m.phone = phone;
+            localStorage.setItem('silsilahDataV1', JSON.stringify(silsilahData));
+            // Cloud sync back to Firestore for silsilah
+            if (typeof db !== 'undefined' && db) {
+              db.collection('data').doc('silsilah').set({ list: silsilahData })
+                .catch(err => console.error("Firestore silsilah sync-back failed: ", err));
+            }
+          }
+        }
+      } else {
+        // Add Mode
+        kontakData.push({ name, role, avatar, familyGroup, phone });
+      }
+
+      saveKontak();
+      closeContactModal();
+    };
+
+    // Search function
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      const contactItems = document.querySelectorAll('.contact-item');
+      const familyGroups = document.querySelectorAll('.family-group');
+
+      contactItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+
+      familyGroups.forEach(group => {
+        const hasVisible = Array.from(group.querySelectorAll('.contact-item')).some(i => i.style.display !== 'none');
+        group.style.display = hasVisible ? 'block' : 'none';
+      });
+    });
+
+    document.getElementById('addContactModal').addEventListener('click', e => { if (e.target.id === 'addContactModal') closeContactModal(); });
+    // DOMContentLoaded-safe init
+    function init() {
+      // Real-time Firestore sync
+      if (typeof db !== 'undefined' && db) {
+        db.collection('data').doc('kontak').onSnapshot((doc) => {
+          if (doc.exists) {
+            const data = doc.data();
+            if (data && Array.isArray(data.list)) {
+              kontakData = data.list;
+              localStorage.setItem('kontakDataV1', JSON.stringify(kontakData));
+              renderKontak();
+            }
+          } else {
+            // Auto-migrate if Firestore is empty and we are Admin with local data
+            if (getIsAdmin() && kontakData && kontakData.length > 0) {
+              console.log("Auto-migrating kontak to cloud...");
+              db.collection('data').doc('kontak').set({ list: kontakData })
+                .catch(err => console.error("Firestore kontak auto-migrate failed: ", err));
+            }
+          }
+        }, (error) => {
+          console.warn("Firestore kontak read failed: ", error);
+        });
+      }
+      renderKontak();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => init());
+    } else {
+      init();
+    }
+  </script>
+</body>
+
+</html>

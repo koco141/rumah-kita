@@ -1,0 +1,4 @@
+# Netlify Redirects — RumahKita Portal Keluarga
+# Redirect root ke login.html agar halaman pertama adalah login
+
+/   /login.html   200
