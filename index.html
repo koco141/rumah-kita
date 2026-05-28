@@ -502,14 +502,14 @@
         // Deteksi jika user melakukan scroll manual secara signifikan
         if (diff > 1.5) {
           pauseAutoScroll();
+
+          grid.classList.add('is-scrolling');
+          clearTimeout(isScrollingTimeout);
+          isScrollingTimeout = setTimeout(() => {
+            grid.classList.remove('is-scrolling');
+          }, 1200);
         }
         lastScrollLeft = currentScroll;
-
-        grid.classList.add('is-scrolling');
-        clearTimeout(isScrollingTimeout);
-        isScrollingTimeout = setTimeout(() => {
-          grid.classList.remove('is-scrolling');
-        }, 1200);
       }, { passive: true });
     }
 

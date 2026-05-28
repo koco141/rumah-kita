@@ -851,6 +851,9 @@ body {
 .members-grid::-webkit-scrollbar {
   height: 6px;
 }
+.members-grid::-webkit-scrollbar-button {
+  display: none; /* Sembunyikan tombol panah kiri/kanan */
+}
 .members-grid::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 10px;
@@ -867,10 +870,10 @@ body {
 }
 .members-grid:hover::-webkit-scrollbar-thumb,
 .members-grid.is-scrolling::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.2); /* Hijau transparansi 20% */
 }
 .members-grid::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.45) !important;
+  background: rgba(16, 185, 129, 0.4) !important;
 }
 
 .member-card {
