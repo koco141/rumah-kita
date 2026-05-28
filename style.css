@@ -842,38 +842,11 @@ body {
   -ms-overflow-style: none; /* Hide for IE/Edge */
 }
 
-/* Show scrollbar when hovering or active */
-.members-grid:hover,
-.members-grid.is-scrolling {
-  scrollbar-width: thin;
-}
-
+/* Sembunyikan scrollbar sepenuhnya di seluruh browser */
 .members-grid::-webkit-scrollbar {
-  height: 6px;
-}
-.members-grid::-webkit-scrollbar-button {
-  display: none; /* Sembunyikan tombol panah kiri/kanan */
-}
-.members-grid::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 10px;
-  transition: background-color 0.3s ease;
-}
-.members-grid::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 10px;
-  transition: background-color 0.3s ease;
-}
-.members-grid:hover::-webkit-scrollbar-track,
-.members-grid.is-scrolling::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.02);
-}
-.members-grid:hover::-webkit-scrollbar-thumb,
-.members-grid.is-scrolling::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.2); /* Hijau transparansi 20% */
-}
-.members-grid::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.4) !important;
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .member-card {
