@@ -801,38 +801,6 @@
             <div class="spinner" id="adminVerifySpinner" style="display: none;"></div>
           </button>
 
-          <!-- Setup Guide Link & Content -->
-          <div class="otp-setup-container" style="margin-top: 16px; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
-            <button type="button" id="btnToggleOtpSetup" style="background: none; border: none; color: var(--accent-teal); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 0; font-family: var(--font-main);">
-              🔑 Petunjuk Setup Google Authenticator <span id="setupArrow">▼</span>
-            </button>
-            
-            <div id="otpSetupPanel" style="display: none; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-top: 12px; font-size: 13px; color: var(--text-secondary); line-height: 1.6; text-align: left; animation: fadeIn 0.2s ease;">
-              <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">Cara menghubungkan ke aplikasi Authenticator Anda:</p>
-              <ol style="margin-left: 20px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; padding: 0;">
-                <li>Pasang aplikasi <strong>Google Authenticator</strong> di HP Anda.</li>
-                <li>Buka aplikasi, ketuk ikon <strong>(+)</strong> dan pilih <strong>Scan a QR code</strong> (Pindai kode QR) di bawah ini:</li>
-              </ol>
-              
-              <!-- QR Code Area -->
-              <div style="display: flex; flex-direction: column; align-items: center; margin: 12px 0 16px;">
-                <div style="padding: 10px; background: white; border: 1.5px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-                  <img id="otpQrCodeImg" src="" alt="QR Code Setup" style="width: 140px; height: 140px; display: block;" />
-                </div>
-                <span style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Atau masukkan kunci manual di bawah:</span>
-              </div>
-
-              <div style="margin-bottom: 6px; font-size: 12px;">
-                <strong>Kunci Rahasia (Secret Key):</strong>
-                <div style="display: flex; gap: 8px; margin-top: 4px; align-items: center;">
-                  <code id="otpSecretCode" style="background: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; color: #0f172a; flex: 1; text-align: center; border: 1px solid #cbd5e1;">K6YTB4JNZN5G2Y3TMRXXC43U</code>
-                  <button type="button" id="btnCopySecret" style="background: #10b981; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Salin</button>
-                </div>
-              </div>
-              <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; margin-bottom: 0;"><em>Catatan: Pilih opsi "Berdasarkan waktu" (TOTP) di Authenticator Anda. Jangan bagikan kunci rahasia ini!</em></p>
-            </div>
-          </div>
-
           <button type="button" id="btnBackToCredentials" style="margin-top: 14px; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; transition: color 0.2s;">
             ← Kembali ke Kata Sandi
           </button>
@@ -1158,13 +1126,6 @@
         // Lakukan transisi ke Tahap 2 (OTP)
         document.getElementById('adminCredentialsStep').style.display = 'none';
         document.getElementById('adminOtpStep').style.display = 'block';
-        
-        // Generate & Pasang QR Code URL jika belum terpasang
-        const qrImg = document.getElementById('otpQrCodeImg');
-        if (!qrImg.src) {
-          const provisioningUri = `otpauth://totp/RumahKita:Admin?secret=${ADMIN_TOTP_SECRET}&issuer=RumahKita`;
-          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(provisioningUri)}`;
-        }
 
         // Fokus ke input OTP
         setTimeout(() => {
@@ -1252,34 +1213,6 @@
       document.getElementById('adminOtpStep').style.display = 'none';
       document.getElementById('adminCredentialsStep').style.display = 'block';
       document.getElementById('adminPassword').focus();
-    });
-
-    // Toggle Panel Setup OTP
-    document.getElementById('btnToggleOtpSetup').addEventListener('click', () => {
-      const panel = document.getElementById('otpSetupPanel');
-      const arrow = document.getElementById('setupArrow');
-      const isHidden = panel.style.display === 'none';
-
-      panel.style.display = isHidden ? 'block' : 'none';
-      arrow.textContent = isHidden ? '▲' : '▼';
-    });
-
-    // Salin Kunci Rahasia OTP
-    document.getElementById('btnCopySecret').addEventListener('click', () => {
-      const secret = document.getElementById('otpSecretCode').textContent;
-      navigator.clipboard.writeText(secret).then(() => {
-        const btnCopy = document.getElementById('btnCopySecret');
-        btnCopy.textContent = 'Tersalin!';
-        btnCopy.style.background = '#059669';
-        showToast('📋 Kunci rahasia berhasil disalin!', 'success', 2000);
-        setTimeout(() => {
-          btnCopy.textContent = 'Salin';
-          btnCopy.style.background = '#10b981';
-        }, 2000);
-      }).catch(err => {
-        console.error('Failed to copy secret:', err);
-        showToast('⚠️ Gagal menyalin secara otomatis.', 'warning', 2000);
-      });
     });
 
     // ── TOGGLE PASSWORD VISIBILITY ──────────────────────────────────────────
