@@ -217,6 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
     injectKelolaAnggotaModal();
   }
 
+  // Inject mobile actions (profile + logout) into hamburger dropdown menu
+  injectMobileMenuActions();
+
   function injectKelolaAnggotaBtn() {
     // Cari nav-actions di halaman ini
     const navActions = document.querySelector('.nav-actions');
@@ -612,11 +615,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ── INJECT MOBILE MENU ACTIONS ───────────────────────
+  function injectMobileMenuActions() {
+    const navLinks = document.getElementById('navLinks');
+    if (!navLinks || document.getElementById('nav-mobile-actions')) return;
+
+    const userName  = localStorage.getItem('userName')  || '';
+    const userEmail = localStorage.getItem('userEmail') || '';
+    const userRole  = localStorage.getItem('userRole')  || 'anggota';
+
+    if (!userName && !userEmail) return; // Belum login?
+
+    const displayName = userName || userEmail.split('@')[0];
+    const roleBadge = userRole === 'admin' ? '<span class="nav-mobile-badge-admin">Admin</span>' : '';
+
+    const li = document.createElement('li');
+    li.id = 'nav-mobile-actions';
+    li.className = 'nav-mobile-only-item';
+    
+    let adminBtnHtml = '';
+    if (userRole === 'admin') {
+      adminBtnHtml = `
+        <button class="btn-mobile-action btn-mobile-kelola" onclick="openKelolaAnggota()">
+          👥 Kelola Anggota
+        </button>
+      `;
+    }
+
+    li.innerHTML = `
+      <div class="nav-mobile-profile">
+        <span class="nav-mobile-avatar">${userRole === 'admin' ? '⚙️' : '👤'}</span>
+        <div class="nav-mobile-user-details">
+          <span class="nav-mobile-name">${displayName}</span>
+          ${roleBadge}
+        </div>
+      </div>
+      <div class="nav-mobile-buttons">
+        ${adminBtnHtml}
+        <button class="btn-mobile-action btn-mobile-logout" onclick="doLogout()">
+          🚪 Keluar
+        </button>
+      </div>
+    `;
+
+    navLinks.appendChild(li);
+  }
+
   // ── HAMBURGER MENU ─────────────────────────
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('navLinks');
+  const navbarEl  = document.getElementById('navbar');
+
   hamburger?.addEventListener('click', () => {
     navLinks?.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    navbarEl?.classList.toggle('nav-active');
   });
 
   // Close nav on link click (mobile)
@@ -624,8 +677,21 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', () => {
       if (window.innerWidth <= 768 && navLinks) {
         navLinks.classList.remove('active');
+        hamburger?.classList.remove('active');
+        navbarEl?.classList.remove('nav-active');
       }
     });
+  });
+
+  // Close mobile nav when clicking outside
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768 && navLinks?.classList.contains('active')) {
+      if (!navLinks.contains(e.target) && !hamburger?.contains(e.target)) {
+        navLinks.classList.remove('active');
+        hamburger?.classList.remove('active');
+        navbarEl?.classList.remove('nav-active');
+      }
+    }
   });
 
   // ── ROLE & SESSION MANAGEMENT ──────────────

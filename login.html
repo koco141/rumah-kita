@@ -748,7 +748,7 @@
         </div>
 
         <button type="submit" class="btn-admin-login" id="btnAdminLogin">
-          <span id="adminLoginText">Masuk sebagai Admin</span>
+          <span id="adminLoginText">Masuk</span>
           <div class="spinner" id="adminSpinner"></div>
         </button>
       </form>
@@ -1032,7 +1032,7 @@
           setTimeout(redirectToHome, 1500);
         } catch (err) {
           btn.disabled       = false;
-          textEl.textContent = 'Masuk sebagai Admin';
+          textEl.textContent = 'Masuk';
           spinner.style.display = 'none';
 
           let msg = 'Username atau kata sandi salah.';
@@ -1054,7 +1054,7 @@
           setTimeout(redirectToHome, 1500);
         } else {
           btn.disabled       = false;
-          textEl.textContent = 'Masuk sebagai Admin';
+          textEl.textContent = 'Masuk';
           spinner.style.display = 'none';
           showError('Username atau kata sandi salah.');
         }
