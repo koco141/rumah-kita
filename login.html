@@ -653,6 +653,29 @@
       .btn-admin-login { padding: 12px 20px; }
       .login-footer { margin-top: 16px; padding-top: 16px; }
     }
+
+    /* 2FA/OTP Styles */
+    .otp-setup-container {
+      transition: all 0.3s ease;
+    }
+    #otpSecretCode {
+      user-select: all;
+    }
+    #btnBackToCredentials:hover {
+      color: var(--text-primary) !important;
+      text-decoration: underline;
+    }
+    #btnCopySecret:hover {
+      background: #059669 !important;
+      transform: translateY(-1px);
+    }
+    #btnCopySecret:active {
+      transform: translateY(0);
+    }
+    #adminOtpCode:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+    }
   </style>
 </head>
 <body>
@@ -731,26 +754,89 @@
 
       <!-- Admin Form -->
       <form id="adminForm" autocomplete="on" onsubmit="return false;">
-        <div class="form-group">
-          <label for="adminUsername">Username</label>
-          <input type="text" id="adminUsername" name="username"
-                 placeholder="Masukkan username admin"
-                 autocomplete="username" />
-        </div>
-        <div class="form-group">
-          <label for="adminPassword">Kata Sandi</label>
-          <div class="input-wrap">
-            <input type="password" id="adminPassword" name="password"
-                   placeholder="••••••••"
-                   autocomplete="current-password" />
-            <button type="button" class="toggle-pass" id="togglePass" title="Tampilkan sandi">👁</button>
+        <!-- TAHAP 1: Kredensial -->
+        <div id="adminCredentialsStep">
+          <div class="form-group">
+            <label for="adminUsername">Username</label>
+            <input type="text" id="adminUsername" name="username"
+                   placeholder="Masukkan username admin"
+                   autocomplete="username" />
           </div>
+          <div class="form-group">
+            <label for="adminPassword">Kata Sandi</label>
+            <div class="input-wrap">
+              <input type="password" id="adminPassword" name="password"
+                     placeholder="••••••••"
+                     autocomplete="current-password" />
+              <button type="button" class="toggle-pass" id="togglePass" title="Tampilkan sandi">👁</button>
+            </div>
+          </div>
+          
+          <button type="button" class="btn-admin-login" id="btnAdminNext">
+            <span id="adminNextText">Lanjut</span>
+            <div class="spinner" id="adminSpinner"></div>
+          </button>
         </div>
 
-        <button type="submit" class="btn-admin-login" id="btnAdminLogin">
-          <span id="adminLoginText">Masuk</span>
-          <div class="spinner" id="adminSpinner"></div>
-        </button>
+        <!-- TAHAP 2: OTP (Sembunyikan default) -->
+        <div id="adminOtpStep" style="display: none; animation: fadeIn 0.3s ease;">
+          <div class="admin-label" style="margin-bottom: 14px;">
+            <span class="admin-badge" style="background: rgba(16,185,129,0.12); color: #10b981; border: 1px solid rgba(16,185,129,0.25);">2FA AKTIF</span>
+            <span style="font-size: 13px; color: var(--text-secondary);">Masukkan kode verifikasi 6-digit dari aplikasi Google Authenticator Anda.</span>
+          </div>
+          
+          <div class="form-group">
+            <label for="adminOtpCode">Kode OTP 6-Digit</label>
+            <input type="text" id="adminOtpCode" name="otpcode"
+                   placeholder="000000"
+                   maxlength="6"
+                   pattern="[0-9]*"
+                   inputmode="numeric"
+                   autocomplete="one-time-code"
+                   style="text-align: center; font-size: 24px; letter-spacing: 6px; font-weight: 700; background: #fff;" />
+          </div>
+
+          <button type="submit" class="btn-admin-login" id="btnAdminVerify">
+            <span id="adminVerifyText">Verifikasi & Masuk</span>
+            <div class="spinner" id="adminVerifySpinner" style="display: none;"></div>
+          </button>
+
+          <!-- Setup Guide Link & Content -->
+          <div class="otp-setup-container" style="margin-top: 16px; border-top: 1px dashed #e2e8f0; padding-top: 12px;">
+            <button type="button" id="btnToggleOtpSetup" style="background: none; border: none; color: var(--accent-teal); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 0; font-family: var(--font-main);">
+              🔑 Petunjuk Setup Google Authenticator <span id="setupArrow">▼</span>
+            </button>
+            
+            <div id="otpSetupPanel" style="display: none; background: #fafafa; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-top: 12px; font-size: 13px; color: var(--text-secondary); line-height: 1.6; text-align: left; animation: fadeIn 0.2s ease;">
+              <p style="margin-bottom: 12px; font-weight: 600; color: var(--text-primary);">Cara menghubungkan ke aplikasi Authenticator Anda:</p>
+              <ol style="margin-left: 20px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; padding: 0;">
+                <li>Pasang aplikasi <strong>Google Authenticator</strong> di HP Anda.</li>
+                <li>Buka aplikasi, ketuk ikon <strong>(+)</strong> dan pilih <strong>Scan a QR code</strong> (Pindai kode QR) di bawah ini:</li>
+              </ol>
+              
+              <!-- QR Code Area -->
+              <div style="display: flex; flex-direction: column; align-items: center; margin: 12px 0 16px;">
+                <div style="padding: 10px; background: white; border: 1.5px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                  <img id="otpQrCodeImg" src="" alt="QR Code Setup" style="width: 140px; height: 140px; display: block;" />
+                </div>
+                <span style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Atau masukkan kunci manual di bawah:</span>
+              </div>
+
+              <div style="margin-bottom: 6px; font-size: 12px;">
+                <strong>Kunci Rahasia (Secret Key):</strong>
+                <div style="display: flex; gap: 8px; margin-top: 4px; align-items: center;">
+                  <code id="otpSecretCode" style="background: #e2e8f0; padding: 6px 12px; border-radius: 6px; font-family: monospace; font-size: 13px; font-weight: 700; letter-spacing: 1px; color: #0f172a; flex: 1; text-align: center; border: 1px solid #cbd5e1;">K6YTB4JNZN5G2Y3TMRXXC43U</code>
+                  <button type="button" id="btnCopySecret" style="background: #10b981; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Salin</button>
+                </div>
+              </div>
+              <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; margin-bottom: 0;"><em>Catatan: Pilih opsi "Berdasarkan waktu" (TOTP) di Authenticator Anda. Jangan bagikan kunci rahasia ini!</em></p>
+            </div>
+          </div>
+
+          <button type="button" id="btnBackToCredentials" style="margin-top: 14px; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; transition: color 0.2s;">
+            ← Kembali ke Kata Sandi
+          </button>
+        </div>
       </form>
 
       <!-- Footer -->
@@ -771,6 +857,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <!-- OTPAuth Library for Google Authenticator TOTP -->
+  <script src="https://cdn.jsdelivr.net/npm/otpauth@9.4.1/dist/otpauth.umd.min.js"></script>
   <script src="firebase-config.js"></script>
   <script>
 
@@ -987,7 +1075,7 @@
       } catch (err) {
         console.error('Google login error:', err);
         btn.classList.remove('loading');
-        btn.innerHTML = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg> Masuk dengan Google`;
+        btn.innerHTML = `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg> Masuk dengan Google`;
 
         if (err.code === 'auth/popup-closed-by-user') return;
         if (err.code === 'auth/popup-blocked') {
@@ -998,13 +1086,17 @@
       }
     });
 
-    // ── ADMIN LOGIN ─────────────────────────────────────────────────────────
-    document.getElementById('adminForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // ── ADMIN LOGIN 2-STAGE WITH OTP ─────────────────────────────────────────
+    let tempAdminUser = '';
+    let tempAdminPass = '';
+    const ADMIN_TOTP_SECRET = 'K6YTB4JNZN5G2Y3TMRXXC43U'; // Secret Key Base32
+
+    // Verifikasi Kredensial Tahap 1 (Lanjut ke OTP)
+    document.getElementById('btnAdminNext').addEventListener('click', async () => {
       const username = document.getElementById('adminUsername').value.trim();
       const password = document.getElementById('adminPassword').value.trim();
-      const btn      = document.getElementById('btnAdminLogin');
-      const textEl   = document.getElementById('adminLoginText');
+      const btn      = document.getElementById('btnAdminNext');
+      const textEl   = document.getElementById('adminNextText');
       const spinner  = document.getElementById('adminSpinner');
 
       if (!username || !password) {
@@ -1021,18 +1113,17 @@
                                    firebaseConfig.apiKey &&
                                    !firebaseConfig.apiKey.includes('Fake');
 
+      let credentialsValid = false;
+
       if (typeof auth !== 'undefined' && auth && isFirebaseConfigured) {
         // Coba Firebase Email/Password
         try {
           await auth.signInWithEmailAndPassword(username, password);
-          localStorage.setItem('userRole', 'admin');
-          localStorage.setItem('userEmail', username);
-          localStorage.setItem('userName', 'Admin');
-          showToast('✅ Berhasil masuk sebagai Admin!', 'success', 2000);
-          setTimeout(redirectToHome, 1500);
+          await auth.signOut(); // logout dulu untuk mengamankan 2FA
+          credentialsValid = true;
         } catch (err) {
           btn.disabled       = false;
-          textEl.textContent = 'Masuk';
+          textEl.textContent = 'Lanjut';
           spinner.style.display = 'none';
 
           let msg = 'Username atau kata sandi salah.';
@@ -1047,18 +1138,148 @@
         // Fallback: credentials lokal
         await new Promise(r => setTimeout(r, 800)); // simulasi delay
         if (username === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-          localStorage.setItem('userRole', 'admin');
-          localStorage.setItem('userEmail', username);
-          localStorage.setItem('userName', 'Admin');
-          showToast('✅ Berhasil masuk sebagai Admin!', 'success', 2000);
-          setTimeout(redirectToHome, 1500);
+          credentialsValid = true;
         } else {
           btn.disabled       = false;
-          textEl.textContent = 'Masuk';
+          textEl.textContent = 'Lanjut';
           spinner.style.display = 'none';
           showError('Username atau kata sandi salah.');
         }
       }
+
+      if (credentialsValid) {
+        tempAdminUser = username;
+        tempAdminPass = password;
+
+        btn.disabled       = false;
+        textEl.textContent = 'Lanjut';
+        spinner.style.display = 'none';
+
+        // Lakukan transisi ke Tahap 2 (OTP)
+        document.getElementById('adminCredentialsStep').style.display = 'none';
+        document.getElementById('adminOtpStep').style.display = 'block';
+        
+        // Generate & Pasang QR Code URL jika belum terpasang
+        const qrImg = document.getElementById('otpQrCodeImg');
+        if (!qrImg.src) {
+          const provisioningUri = `otpauth://totp/RumahKita:Admin?secret=${ADMIN_TOTP_SECRET}&issuer=RumahKita`;
+          qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(provisioningUri)}`;
+        }
+
+        // Fokus ke input OTP
+        setTimeout(() => {
+          document.getElementById('adminOtpCode').focus();
+        }, 100);
+
+        showToast('🔓 Langkah 1 Sukses! Masukkan kode OTP Google Authenticator Anda.', 'info', 3000);
+      }
+    });
+
+    // Verifikasi OTP Tahap 2 & Login Akhir
+    document.getElementById('adminForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (document.getElementById('adminCredentialsStep').style.display !== 'none') {
+        document.getElementById('btnAdminNext').click();
+        return;
+      }
+
+      const enteredOtp = document.getElementById('adminOtpCode').value.trim();
+      const btn        = document.getElementById('btnAdminVerify');
+      const textEl     = document.getElementById('adminVerifyText');
+      const spinner    = document.getElementById('adminVerifySpinner');
+
+      if (!enteredOtp) {
+        showError('Mohon isi kode OTP 6-digit.');
+        return;
+      }
+
+      if (enteredOtp.length !== 6 || isNaN(enteredOtp)) {
+        showError('Kode OTP harus berupa 6-digit angka.');
+        return;
+      }
+
+      btn.disabled = true;
+      textEl.textContent = 'Memverifikasi OTP...';
+      spinner.style.display = 'block';
+
+      await new Promise(r => setTimeout(r, 600));
+
+      try {
+        const totp = new OTPAuth.TOTP({
+          issuer: 'RumahKita',
+          label: 'Admin',
+          algorithm: 'SHA1',
+          digits: 6,
+          period: 30,
+          secret: ADMIN_TOTP_SECRET
+        });
+
+        // Validasi dengan window tolerance 1 (30 detik toleransi pergeseran waktu)
+        const isValid = totp.validate({ token: enteredOtp, window: 1 });
+
+        if (isValid !== null) {
+          const isFirebaseConfigured = typeof firebaseConfig !== 'undefined' &&
+                                       firebaseConfig.apiKey &&
+                                       !firebaseConfig.apiKey.includes('Fake');
+          if (typeof auth !== 'undefined' && auth && isFirebaseConfigured) {
+            await auth.signInWithEmailAndPassword(tempAdminUser, tempAdminPass);
+          }
+
+          localStorage.setItem('userRole', 'admin');
+          localStorage.setItem('userEmail', tempAdminUser);
+          localStorage.setItem('userName', 'Admin');
+
+          showToast('✅ Berhasil masuk sebagai Admin!', 'success', 2000);
+          setTimeout(redirectToHome, 1500);
+        } else {
+          btn.disabled = false;
+          textEl.textContent = 'Verifikasi & Masuk';
+          spinner.style.display = 'none';
+          showError('Kode OTP salah atau kedaluwarsa.');
+        }
+      } catch (err) {
+        console.error('OTP Verification Error:', err);
+        btn.disabled = false;
+        textEl.textContent = 'Verifikasi & Masuk';
+        spinner.style.display = 'none';
+        showError('Gagal memverifikasi OTP. Pastikan waktu HP Anda sinkron.');
+      }
+    });
+
+    // Tombol Kembali ke Kredensial
+    document.getElementById('btnBackToCredentials').addEventListener('click', () => {
+      document.getElementById('adminOtpStep').style.display = 'none';
+      document.getElementById('adminCredentialsStep').style.display = 'block';
+      document.getElementById('adminPassword').focus();
+    });
+
+    // Toggle Panel Setup OTP
+    document.getElementById('btnToggleOtpSetup').addEventListener('click', () => {
+      const panel = document.getElementById('otpSetupPanel');
+      const arrow = document.getElementById('setupArrow');
+      const isHidden = panel.style.display === 'none';
+
+      panel.style.display = isHidden ? 'block' : 'none';
+      arrow.textContent = isHidden ? '▲' : '▼';
+    });
+
+    // Salin Kunci Rahasia OTP
+    document.getElementById('btnCopySecret').addEventListener('click', () => {
+      const secret = document.getElementById('otpSecretCode').textContent;
+      navigator.clipboard.writeText(secret).then(() => {
+        const btnCopy = document.getElementById('btnCopySecret');
+        btnCopy.textContent = 'Tersalin!';
+        btnCopy.style.background = '#059669';
+        showToast('📋 Kunci rahasia berhasil disalin!', 'success', 2000);
+        setTimeout(() => {
+          btnCopy.textContent = 'Salin';
+          btnCopy.style.background = '#10b981';
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy secret:', err);
+        showToast('⚠️ Gagal menyalin secara otomatis.', 'warning', 2000);
+      });
     });
 
     // ── TOGGLE PASSWORD VISIBILITY ──────────────────────────────────────────
@@ -1071,7 +1292,6 @@
     });
 
     // ── FIRESTORE AGENDA SYNC ───────────────────────────────────────────────
-    // Load agenda dari Firestore jika tersedia (bisa baca tanpa login)
     if (typeof db !== 'undefined' && db) {
       db.collection('data').doc('agenda').get()
         .then(doc => {
@@ -1090,7 +1310,17 @@
 
     // ── ENTER KEY SUPPORT ───────────────────────────────────────────────────
     document.getElementById('adminPassword').addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('adminForm').dispatchEvent(new Event('submit'));
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('btnAdminNext').click();
+      }
+    });
+
+    document.getElementById('adminOtpCode').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        document.getElementById('adminForm').dispatchEvent(new Event('submit'));
+      }
     });
 
   </script>
